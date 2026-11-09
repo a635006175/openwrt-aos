@@ -77,9 +77,8 @@ docs/reports/              # 开发过程中的设计、审计与验证报告
 
 ### 3.1 环境
 
-Linux（Ubuntu 22.04 及以上验证过），普通用户（**不要 root**），磁盘 ≥ 40 GB，
+Linux（Ubuntu 22.04 及以上验证过），磁盘 ≥ 40 GB，
 已安装 `git make gcc g++ gawk rsync sha256sum xorriso mkfs.fat mcopy`。
-不要在 Windows 挂载盘（`/mnt/c`、9p、drvfs）上编译。
 
 ### 3.2 一键编译
 
