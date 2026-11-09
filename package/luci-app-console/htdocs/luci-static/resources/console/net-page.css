@@ -1,0 +1,91 @@
+/* SPDX-License-Identifier: Apache-2.0 */
+/* 内外网设置页（爱快式）样式 */
+
+.cn-net-page > .cn-net-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+.cn-net-heading h2 { font-size: 20px; margin: 0 0 6px; }
+.cn-net-heading p { color: #64798a; font-size: 13px; line-height: 1.7; margin: 0; max-width: 72ch; }
+
+.cn-net-summary { padding: 18px 24px; }
+.cn-net-metrics { display: flex; flex-wrap: wrap; gap: 10px 0; }
+.cn-net-metric { flex: 1 1 0; min-width: 120px; padding: 0 20px; border-left: 1px solid #e5ebef; }
+.cn-net-metric:first-child { padding-left: 0; border-left: 0; }
+.cn-net-metric strong { display: block; font-size: 24px; font-weight: 500; color: #2475ae; }
+.cn-net-metric span { display: block; margin-top: 3px; font-size: 12px; color: #64798a; }
+
+.cn-panel { padding: 18px 24px; margin-bottom: 16px; }
+.cn-panel h3 { font-size: 15px; margin: 0 0 14px; }
+
+.cn-net-list { display: flex; flex-direction: column; gap: 10px; }
+.cn-net-iface { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 16px; padding: 12px 14px; border: 1px solid #e0e7ed; border-radius: 4px; background: #fbfcfd; }
+.cn-net-iface.up { border-left: 3px solid #168060; }
+.cn-net-iface.down { border-left: 3px solid #a3404d; }
+.cn-net-dot { width: 8px; height: 8px; border-radius: 50%; flex: 0 0 auto; }
+.cn-net-iface.up .cn-net-dot { background: #168060; }
+.cn-net-iface.down .cn-net-dot { background: #a3404d; }
+.cn-net-name { font-size: 14px; color: #334e63; }
+.cn-net-device { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; font-size: 12px; color: #64798a; border: 1px solid #dfe7ed; border-radius: 3px; padding: 2px 8px; background: #fff; }
+.cn-net-proto { font-size: 12px; color: #2475ae; background: #edf6fc; border-radius: 3px; padding: 2px 8px; }
+.cn-net-addr { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; font-size: 13px; color: #405365; }
+.cn-net-gw { font-size: 12px; color: #64798a; }
+.cn-net-status { font-size: 12px; margin-left: auto; }
+.cn-net-iface.up .cn-net-status { color: #168060; }
+.cn-net-iface.down .cn-net-status { color: #a3404d; }
+.cn-net-actions { display: flex; gap: 6px; flex: 0 0 auto; }
+.cn-net-actions .cbi-button { min-height: 30px; padding: 4px 12px; }
+
+.cn-net-free p { margin: 0 0 8px; overflow-wrap: anywhere; }
+.cn-net-free .cn-help { margin: 0; color: #64798a; font-size: 12px; line-height: 1.7; }
+
+.cn-net-modal-head { display: flex; align-items: center; gap: 12px; padding-bottom: 14px; margin-bottom: 6px; border-bottom: 1px solid #e5ebef; }
+.cn-net-proto-groups { margin-bottom: 8px; }
+.cn-net-proto-fixed { padding-top: 5px; }
+
+.cn-net-warn { color: #a3404d; background: #fff5f6; border-left: 3px solid #ba3341; padding: 10px 12px; font-size: 13px; line-height: 1.7; }
+
+/* 接口行上「默认路由」小徽标：不影响既有的 up/down 配色与行高 */
+.cn-net-badge { flex: 0 0 auto; font-size: 11px; line-height: 1.6; color: #2475ae; background: #edf6fc; border: 1px solid #cfe5f4; border-radius: 3px; padding: 0 6px; }
+
+/* 编辑弹框的只读区「当前连接信息」：
+   两列网格，窄屏自动降为单列；所有文本允许换行（overflow-wrap）
+   并对网格子项设 min-width:0，保证 1440/1024/768/375 都不横向溢出。 */
+.cn-net-info { border: 1px solid #e0e7ed; border-radius: 4px; background: #fbfcfd; padding: 12px 14px; margin-bottom: 14px; }
+.cn-net-info-title { margin: 0 0 10px; font-size: 13px; font-weight: 600; color: #334e63; }
+.cn-net-info-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 14px; }
+.cn-net-info-item { display: flex; align-items: baseline; gap: 8px; min-width: 0; font-size: 12px; line-height: 1.7; }
+.cn-net-info-label { flex: 0 0 auto; color: #64798a; white-space: nowrap; }
+.cn-net-info-label::after { content: '：'; }
+.cn-net-info-value {
+	flex: 1 1 auto; min-width: 0; color: #334e63;
+	font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+	overflow-wrap: anywhere; word-break: break-word;
+}
+
+/* MTU 输入框的即时校验提示 */
+.cn-net-mtu-field { margin-bottom: 4px; }
+.cn-net-mtu-note { margin: -2px 0 0; padding: 0 0 8px; font-size: 12px; line-height: 1.7; color: #64798a; overflow-wrap: anywhere; }
+.cn-net-mtu-note.cn-net-mtu-error { color: #a3404d; }
+.cbi-value-field input.invalid { border-color: #ba3341; box-shadow: 0 0 0 1px rgba(186,51,65,.18); }
+
+/* 网桥成员：接口行上的成员提示 */
+.cn-net-ports-text { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; font-size: 12px; color: #405365; }
+
+/* 网桥成员：编辑弹框里的勾选框 */
+.cn-net-ports { display: flex; flex-wrap: wrap; gap: 8px; }
+.cn-net-port { display: flex; align-items: center; gap: 7px; padding: 8px 14px; border: 1px solid #dfe7ed; border-radius: 4px; background: #fbfcfd; cursor: pointer; font-size: 13px; }
+.cn-net-port input { margin: 0; }
+.cn-net-port small { color: #64798a; font-size: 11px; }
+.cn-net-port.disabled { opacity: .55; cursor: not-allowed; background: #f4f6f8; }
+
+@media (max-width: 900px) {
+	.cn-net-iface .cn-net-status { margin-left: 0; }
+	.cn-net-metric { min-width: 96px; }
+	.cn-net-info-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* 375 级窄屏：只读区收紧内边距，标签不再强制单行，避免长 IPv6 / MAC 撑破弹框 */
+@media (max-width: 480px) {
+	.cn-net-info { padding: 10px 12px; }
+	.cn-net-info-item { flex-wrap: wrap; gap: 0 6px; }
+	.cn-net-info-label { white-space: normal; }
+	.cn-net-modal-head { flex-wrap: wrap; }
+}

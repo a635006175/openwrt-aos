@@ -1,0 +1,4 @@
+#!/bin/sh
+chmod 0755 /etc/init.d/console-portmap /usr/share/rpcd/ucode/console-portmap
+/etc/init.d/console-portmap enable
+exit 0

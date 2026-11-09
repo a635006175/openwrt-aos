@@ -1,0 +1,61 @@
+/* SPDX-License-Identifier: Apache-2.0 */
+.ddns-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 2px 9px;
+	border-radius: 999px;
+	font-size: 12px;
+	font-weight: 600;
+	line-height: 1.7;
+	white-space: nowrap;
+}
+.ddns-badge::before {
+	content: "";
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	background: currentColor;
+}
+.ddns-badge.ok { color: #1f7a44; background: #e8f5ec; }
+.ddns-badge.wait { color: #8a6d1d; background: #fdf4dd; }
+.ddns-badge.off { color: #667085; background: #f1f3f6; }
+.ddns-badge.error { color: #b23c3c; background: #fbeaea; }
+.ddns-ip { color: #64798a; font-size: 12px; }
+.ddns-hint { color: #8796a1; font-size: 12px; }
+.ddns-status-text { color: #64798a; font-size: 12px; }
+.ddns-root .cs-scroll table { min-width: 880px; }
+.ddns-root .cs-actions { flex-wrap: nowrap; }
+.ddns-inline { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ddns-inline input { width: 110px; box-sizing: border-box; }
+.ddns-inline select { width: auto; min-width: 96px; }
+.ddns-editor .cbi-value-description { max-width: 560px; }
+.ddns-editor .cbi-value-title { min-width: 120px; }
+.ddns-editor .cbi-value { grid-template-columns: 128px minmax(0, 1fr); }
+.ddns-editor .cbi-value[hidden] { display: none !important; }
+.ddns-editor .cbi-value-field { min-width: 0; }
+.ddns-editor .cbi-value-field > input,
+.ddns-editor .cbi-value-field > select { width: 100%; box-sizing: border-box; }
+.ddns-editor :is(input, select, textarea) { max-width: 100%; box-sizing: border-box; }
+body.console-ui #modal_overlay > .modal.ddns-modal {
+	display: flex;
+	flex-direction: column;
+	width: min(720px, calc(100vw - 24px));
+	height: min(88vh, 880px);
+	max-height: min(88vh, 880px);
+	min-height: 0;
+	overflow: hidden;
+}
+body.console-ui #modal_overlay > .modal.ddns-modal > .ddns-editor {
+	flex: 1 1 auto;
+	min-height: 0;
+	overflow-x: hidden;
+	overflow-y: auto;
+	overscroll-behavior: contain;
+	scrollbar-gutter: stable;
+}
+body.console-ui #modal_overlay > .modal.ddns-modal > .button-row { flex: 0 0 auto; }
+@media (max-width: 760px) {
+	body.console-ui #modal_overlay > .modal.ddns-modal { height: calc(100vh - 24px); max-height: calc(100vh - 24px); }
+	.ddns-inline input { width: 90px; }
+}

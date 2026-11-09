@@ -1,0 +1,31 @@
+{
+	"luci-app-console": {
+		"description": "Read-only access to the OpenWrt system overview",
+		"read": {
+			"ubus": {
+				"system": [ "board", "info" ],
+				"network.interface": [ "dump" ],
+				"luci": [ "getConntrackList" ],
+				"console-traffic": [ "history" ],
+				"console-conntrack": [ "list" ],
+				"console-security": [ "protocol" ],
+				"luci-rpc": [ "getNetworkDevices", "getWirelessDevices", "getDHCPLeases", "getHostHints" ],
+				"iwinfo": [ "assoclist", "devices" ],
+				"file": [ "read", "list" ]
+			},
+			"uci": [ "dhcp", "firewall", "network", "wireless" ],
+			"file": {
+				"/proc/stat": [ "read" ],
+				"/proc/sys/net/netfilter/nf_conntrack_count": [ "read" ],
+				"/proc/sys/net/netfilter/nf_conntrack_acct": [ "read" ],
+				"/sys/class/thermal": [ "list" ],
+				"/sys/class/thermal/thermal_zone*/type": [ "read" ],
+				"/sys/class/thermal/thermal_zone*/temp": [ "read" ],
+				"/sys/class/hwmon": [ "list" ],
+				"/sys/class/hwmon/hwmon*": [ "list" ],
+				"/sys/class/hwmon/hwmon*/name": [ "read" ],
+				"/sys/class/hwmon/hwmon*/temp*_input": [ "read" ]
+			}
+		}
+	}
+}

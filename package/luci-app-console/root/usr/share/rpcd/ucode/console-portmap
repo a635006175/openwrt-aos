@@ -1,0 +1,7 @@
+// SPDX-License-Identifier: Apache-2.0
+import { state, apply, validate, topology } from 'console.portmap';
+return { 'console-portmap': {
+	state:{call:()=>{try{return state();}catch(e){return {error:e.message};}}},
+	check:{args:{config:{}},call:req=>{try{return {ok:true,config:validate(req.args.config,topology())};}catch(e){return {error:e.message};}}},
+	apply:{args:{config:{}},call:req=>{try{return {ok:true,state:apply(req.args.config)};}catch(e){return {error:e.message};}}}
+} };

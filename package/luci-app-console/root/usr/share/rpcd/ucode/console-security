@@ -1,0 +1,16 @@
+// SPDX-License-Identifier: Apache-2.0
+import { state,history,protocol,logs,blocked,geoLookup,applyPolicy,confirmPolicy,rollbackPolicy,startGeo,preview } from 'console.security';
+function respond(fn) { try { return fn(); } catch(e) { return {error:e.message || '防火墙操作失败'}; } }
+return { 'console-security': {
+	state: { call: () => respond(state) },
+	history: { args: { device:'all', seconds:3600 }, call:req=>respond(()=>history(req.args.device,req.args.seconds)) },
+	protocol: { call:()=>respond(protocol) },
+	logs: { call:()=>respond(logs) },
+	blocked: { call:()=>respond(blocked) },
+	lookup: { args: { ip:'' }, call:req=>respond(()=>geoLookup(req.args.ip)) },
+	preview: { args: { config:{},ip:'',direction:'input',protocol:'tcp',port:443,device:'all' }, call:req=>respond(()=>preview(req.args)) },
+	apply: { args: { config:{} }, call:req=>respond(()=>applyPolicy(req.args.config)) },
+	confirm: { call:()=>respond(confirmPolicy) },
+	rollback: { call:()=>respond(()=>rollbackPolicy(false)) },
+	geo_update: { call:()=>respond(startGeo) }
+} };

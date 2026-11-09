@@ -1,0 +1,5 @@
+#!/bin/sh
+chmod 0755 /etc/init.d/console-security /usr/share/rpcd/ucode/console-security
+/etc/init.d/console-security enable
+/etc/init.d/console-security start
+exit 0

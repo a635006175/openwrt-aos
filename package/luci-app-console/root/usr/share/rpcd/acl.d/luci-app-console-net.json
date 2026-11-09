@@ -1,0 +1,25 @@
+{
+	"luci-app-console-net": {
+		"description": "Manage WAN/LAN interfaces from the console UI",
+		"read": {
+			"ubus": {
+				"console-net": [ "state", "check", "bridge_check" ],
+				"luci": [ "getFeatures" ],
+				"network.interface": [ "dump" ],
+				"uci": [ "get", "changes" ]
+			},
+			"uci": [ "network", "firewall", "luci" ],
+			"file": {
+				"/": [ "list" ],
+				"/*": [ "list" ]
+			}
+		},
+		"write": {
+			"ubus": {
+				"console-net": [ "apply", "confirm", "rollback", "check", "create", "remove", "bridge_check", "bridge_apply" ],
+				"uci": [ "set", "add_list", "delete", "del_list", "commit", "revert", "changes" ]
+			},
+			"uci": [ "network", "firewall" ]
+		}
+	}
+}

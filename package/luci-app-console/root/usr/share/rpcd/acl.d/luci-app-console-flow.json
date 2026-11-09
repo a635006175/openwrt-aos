@@ -1,0 +1,16 @@
+{
+ "luci-app-console-flow": {
+  "description": "Multiline load balancing, protocol/port/domain steering and per-device bandwidth limits",
+  "read": {
+   "ubus": {
+    "console-flow": [ "state", "check", "resolve" ]
+   },
+   "uci": [ "network", "firewall", "dhcp" ]
+  },
+  "write": {
+   "ubus": {
+    "console-flow": [ "apply", "confirm", "rollback", "reset", "refresh" ]
+   }
+  }
+ }
+}

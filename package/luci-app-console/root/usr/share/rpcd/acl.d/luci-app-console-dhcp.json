@@ -1,0 +1,21 @@
+{
+	"luci-app-console-dhcp": {
+		"description": "Manage DHCP server settings from the console UI",
+		"read": {
+			"ubus": {
+				"console-dhcp": [ "state" ],
+				"uci": [ "get", "changes" ],
+				"luci": [ "getFeatures" ],
+				"network.interface": [ "dump" ]
+			},
+			"uci": [ "dhcp", "network", "luci" ]
+		},
+		"write": {
+			"ubus": {
+				"console-dhcp": [ "apply", "check" ],
+				"uci": [ "set", "add_list", "delete", "commit", "revert", "changes" ]
+			},
+			"uci": [ "dhcp", "network" ]
+		}
+	}
+}

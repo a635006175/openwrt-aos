@@ -1,0 +1,17 @@
+// SPDX-License-Identifier: Apache-2.0
+import { state, save, action, selectProxy, setMode, fetchConfig, measureDelay, testSite, setVpnProxy, startDelayBatch, setSourcePolicy, clearConfig } from 'console.mihomo';
+function attempt(fn) { try { return fn(); } catch (e) { return { error: e.message || '操作失败' }; } }
+return { 'console-mihomo': {
+	source_policy: {args:{policy:{}},call:req=>attempt(()=>setSourcePolicy(req.args.policy))},
+	vpn_proxy: {args:{enabled:false},call:req=>attempt(()=>setVpnProxy(req.args.enabled))},
+	delay_start: {call:()=>attempt(startDelayBatch)},
+	status: { call: () => attempt(state) },
+	fetch_config: { args: { url: '' }, call: req => attempt(() => fetchConfig(req.args.url)) },
+	delay: { args: { name: '' }, call: req => attempt(() => measureDelay(req.args.name)) },
+	site_test: { args: { id: '' }, call: req => attempt(() => testSite(req.args.id)) },
+	save: { args: { config: '', mode: 'rule' }, call: req => attempt(() => save(req.args.config, req.args.mode)) },
+	action: { args: { action: '' }, call: req => attempt(() => action(req.args.action)) },
+	clear: { call: () => attempt(clearConfig) },
+	select: { args: { group: '', name: '' }, call: req => attempt(() => selectProxy(req.args.group, req.args.name)) },
+	mode: { args: { mode: '' }, call: req => attempt(() => setMode(req.args.mode)) }
+} };

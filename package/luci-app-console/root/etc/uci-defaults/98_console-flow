@@ -1,0 +1,12 @@
+#!/bin/sh
+# SPDX-License-Identifier: Apache-2.0
+# 安装时的权限与默认配置初始化。
+# 默认状态：服务启用，但流控本身 disabled 且无规则 —— 不产生任何 nft 规则与路由，
+# 用户从页面保存后才会真正生效。
+chmod 0755 /etc/init.d/console-flow /usr/share/rpcd/ucode/console-flow
+chmod 0755 /usr/sbin/console-flow-control.uc /usr/sbin/console-flow-daemon.uc
+mkdir -p /etc/console-flow /etc/console-backup
+chmod 700 /etc/console-flow /etc/console-backup
+[ -f /etc/console-flow/config.json ] || /usr/bin/ucode -e 'import { writeConfig, defaultConfig } from "console.flow-model"; import { stat } from "fs"; if (!stat("/etc/console-flow/config.json")) writeConfig(defaultConfig());'
+/etc/init.d/console-flow enable
+exit 0

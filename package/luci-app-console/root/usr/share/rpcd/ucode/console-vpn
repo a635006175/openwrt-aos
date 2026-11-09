@@ -1,0 +1,59 @@
+// SPDX-License-Identifier: Apache-2.0
+import { currentServer, saveServer, currentClient, saveClient, stopClient, exportClientProfile, exportCa, status, inspectProfile, saveClientFromProfile, clientLink } from 'console.vpn-service';
+import { listAccounts } from 'console.vpn-accounts';
+import { readServerStatus, readServerPid, buildDetail, readClientLog } from 'console.vpn-status';
+
+// status_detail 的组装逻辑：settings + 运行状态 + 账号 + status 文件快照 + 客户端链路/日志。
+// 解析与读取都在 console.vpn-status 里，这里只做一次性取值，保证同一响应内时间一致。
+function statusDetail() {
+	const settings = currentServer(), state = status().server;
+	const now = time();
+	const snapshot = readServerStatus('/var/run/console-vpn', now);
+	const runtime = readServerPid('/var/run/console-vpn', now);
+	return buildDetail({
+		settings, serverState: state, accounts: listAccounts(), snapshot, runtime,
+		// 本机作为客户端连出去的链路：与服务端状态相互独立，二者都要展示。
+		clientLink: clientLink(),
+		clientLog: readClientLog('/var/run/console-vpn', 200)
+	});
+}
+
+return { 'console-vpn': {
+	server_get: { call: () => ({ settings: currentServer(), status: status().server, accounts: listAccounts() }) },
+	server_apply: { args: { enabled: true, vpnSubnet: '', localSubnet: '', port: 1194, protocol: 'udp', endpoint: '', allowWan: false }, call: req => {
+		try { const settings = saveServer(req.args); return { ok: true, settings, status: status().server }; }
+		catch (e) { return { error: e.message || '服务端配置失败' }; }
+	} },
+	client_get: { call: () => ({ settings: currentClient(), status: status().client, link: clientLink() }) },
+	client_apply: { args: { host: '', port: 1194, protocol: 'udp', username: '', password: '', localSubnet: '', ca: '' }, call: req => {
+		try { const settings = saveClient(req.args); return { ok: true, settings, status: status().client, link: clientLink() }; }
+		catch (e) { return { error: e.message || '客户端配置失败' }; }
+	} },
+	client_stop: { call: () => {
+		try { const settings = stopClient(); return { ok: true, settings, status: status().client, link: clientLink() }; }
+		catch (e) { return { error: e.message || '断开客户端失败' }; }
+	} },
+	// 解析 .ovpn 配置文件但不落盘，供页面预览。
+	client_inspect: { args: { profile: '' }, call: req => {
+		try { return { ok: true, parsed: inspectProfile(req.args.profile) }; }
+		catch (e) { return { error: e.message || '解析配置文件失败' }; }
+	} },
+	// 导入 .ovpn 配置文件并启动客户端。
+	client_import: { args: { profile: '', username: '', password: '', localSubnet: '', host: '', port: 0, protocol: '', redirectGateway: false }, call: req => {
+		try { const result = saveClientFromProfile(req.args); return { ok: true, settings: result.settings, status: status().client, link: clientLink(), summary: result.summary }; }
+		catch (e) { return { error: e.message || '导入客户端配置失败' }; }
+	} },
+		profile_export: { args: { username: '' }, call: req => {
+		try { return exportClientProfile(req.args.username); }
+		catch (e) { return { error: e.message || '生成客户端配置失败' }; }
+		} },
+		ca_export: { call: () => {
+			try { return exportCa(); }
+			catch (e) { return { error: e.message || '导出 CA 证书失败' }; }
+		} },
+		// 新：OpenVPN 状态页数据（无参数、只读）
+		status_detail: { call: () => {
+			try { return statusDetail(); }
+			catch (e) { return { error: e.message || '读取 OpenVPN 状态失败' }; }
+		} }
+} };

@@ -1,0 +1,7 @@
+{
+  "luci-app-console-portmap": {
+    "description": "Manage console IPv4 port mappings",
+    "read": { "ubus": { "console-portmap": [ "state", "check" ] } },
+    "write": { "ubus": { "console-portmap": [ "apply" ] } }
+  }
+}

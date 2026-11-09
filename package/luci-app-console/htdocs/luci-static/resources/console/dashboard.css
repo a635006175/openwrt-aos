@@ -1,0 +1,315 @@
+/* SPDX-License-Identifier: Apache-2.0 */
+.ow-shell.ow-hosted { position: static; display: block; z-index: auto; height: auto; }
+.ow-hosted > .ow-topbar, .ow-hosted > .ow-subbar, .ow-hosted > .ow-sidebar, .ow-hosted > .ow-mobile-scrim { display: none !important; }
+.ow-hosted .ow-workspace { overflow: visible; }
+.ow-hosted .ow-telemetry-row { position: static; margin-left: 0; margin-right: auto; padding: 8px 0; gap: 12px; justify-content: flex-start; }
+.ow-hosted .ow-refresh-bar { flex-wrap: wrap; padding: 6px 0; }
+.ow-hosted .ow-main { padding: 0; }
+.ow-shell [hidden] { display: none !important; }
+.ow-no-wireless .ow-protocol-card { grid-column: span 6; }
+.ow-no-wireless .ow-graphs-card { grid-column: 1 / -1; }
+.ow-shell {
+	--ow-blue: #1677E8;
+	--ow-sidebar: #223241;
+	--ow-text: #465665;
+	--ow-muted: #677783;
+	--ow-border: #e1e5e9;
+	--ow-green: #1c825f;
+	--ow-up: #1677E8;
+	--ow-down: #16A36A;
+	--ow-nav-width: 166px;
+	position: fixed;
+	inset: 0;
+	z-index: 850;
+	display: grid;
+	grid-template-columns: var(--ow-nav-width) minmax(0, 1fr);
+	grid-template-rows: 52px 44px minmax(0, 1fr);
+	background: #f5f7f9;
+	color: var(--ow-text);
+	font: 14px/1.5 "Microsoft YaHei", "PingFang SC", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+	color-scheme: light;
+}
+.ow-shell *, .ow-shell *::before, .ow-shell *::after { box-sizing: border-box; }
+.ow-shell a { color: inherit; text-decoration: none; }
+.ow-shell button, .ow-shell select { font: inherit; color: inherit; margin: 0; }
+.ow-shell button { cursor: pointer; box-shadow: none; text-transform: none; letter-spacing: normal; }
+.ow-shell button:disabled { cursor: default; }
+.ow-shell h1, .ow-shell h2, .ow-shell p { margin: 0; padding: 0; font-weight: 400; line-height: 1.5; }
+.ow-shell header { position: static; margin: 0; top: auto; z-index: auto; }
+.ow-shell footer { position: static; margin: 0; border: 0; }
+.ow-shell a:focus-visible, .ow-shell button:focus-visible, .ow-shell select:focus-visible { outline: 2px solid #0d66aa; outline-offset: 3px; border-radius: 2px; }
+.ow-shell .ow-topbar a:focus-visible, .ow-shell .ow-sidebar a:focus-visible, .ow-shell .ow-sidebar button:focus-visible { outline-color: #fff; outline-offset: -3px; }
+.ow-icon { width: 22px; height: 22px; flex: 0 0 auto; display: inline-block; vertical-align: middle; stroke-width: 1.8; }
+.ow-topbar { grid-column: 1 / -1; background: var(--ow-blue); color: white; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; gap: 20px; }
+.ow-brand { display: flex; align-items: baseline; gap: 14px; min-width: 0; }
+.ow-brand-name { font-size: 29px; line-height: 1; font-weight: 600; letter-spacing: -.8px; }
+.ow-version { font-size: 11px; opacity: .95; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 400px; }
+.ow-header-actions { display: flex; gap: 14px; align-items: center; flex-shrink: 0; font-size: 12px; }
+.ow-icon-button { display: inline-flex; align-items: center; justify-content: center; border: none; background: transparent; width: 36px; height: 36px; border-radius: 3px; padding: 6px; }
+.ow-icon-button:hover { background: #e9eef3; }
+.ow-topbar .ow-icon-button:hover, .ow-topbar .ow-session-link:hover { background: #ffffff1f; }
+.ow-local-label, .ow-session-link { display: flex; gap: 8px; align-items: center; }
+.ow-session-link { min-height: 36px; padding: 0 8px; }
+.ow-preview-badge { padding: 3px 9px; border: 1px solid #ffffff80; border-radius: 3px; font-size: 12px; }
+.ow-subbar { grid-column: 1 / -1; display: flex; align-items: center; gap: 24px; background: white; border-bottom: 1px solid var(--ow-border); min-width: 0; }
+.ow-menu-toggle { width: var(--ow-nav-width); height: 44px; background: #1b2936; color: #e9f1f6 !important; border: 0; border-radius: 0; padding: 8px; flex-shrink: 0; }
+.ow-subbar h1 { font-size: 14px; min-width: 72px; }
+.ow-telemetry-row { margin-left: auto; padding-right: 22px; display: flex; justify-content: flex-end; gap: 18px; flex-wrap: wrap; }
+.ow-telemetry { display: flex; align-items: center; color: #346083; gap: 4px; font-size: 12px; white-space: nowrap; }
+.ow-telemetry .ow-icon { width: 15px; height: 15px; color: #1684c4; }
+.ow-sidebar { grid-row: 3; background: var(--ow-sidebar); color: #f0f5f9; overflow-y: auto; min-height: 0; display: flex; flex-direction: column; }
+.ow-nav-item { display: flex; align-items: center; padding: 0 14px; gap: 16px; height: 48px; width: 100%; font-size: 13px !important; border: 0; background: transparent; border-radius: 0; text-align: left; white-space: nowrap; }
+.ow-nav-item .ow-icon { width: 23px; height: 23px; }
+.ow-nav-item.is-active { background: #344657; border-left: 3px solid #4cbde1; padding-left: 11px; }
+.ow-nav-item[href]:hover { background: #304253; }
+.ow-nav-group summary { list-style: none; cursor: pointer; }
+.ow-nav-group summary::-webkit-details-marker { display: none; }
+.ow-nav-group summary:hover, .ow-nav-group[open] > summary { background: #304253; }
+.ow-nav-chevron { margin-left: auto; font-size: 21px; transition: transform .15s; }
+.ow-nav-group[open] .ow-nav-chevron { transform: rotate(90deg); }
+.ow-nav-children { background: #1c2b38; padding: 4px 0; }
+.ow-nav-child, .ow-nav-grandchild { display: block; padding: 9px 12px 9px 51px; font-size: 12px; line-height: 1.4; overflow-wrap: anywhere; }
+.ow-nav-grandchild { padding-left: 63px; color: #c8d7e1 !important; }
+.ow-nav-child:hover, .ow-nav-grandchild:hover { background: #344b5e; }
+.ow-nav-collapsed .ow-nav-children, .ow-nav-collapsed .ow-nav-chevron { display: none; }
+.ow-nav-collapsed .ow-nav-group summary { pointer-events: none; }
+@media (max-width: 700px) { .ow-mobile-open .ow-nav-children { display: block; } .ow-mobile-open .ow-nav-chevron { display: inline; } .ow-mobile-open .ow-nav-group summary { pointer-events: auto; } }
+.ow-nav-item.is-pending { color: #9dacba; opacity: 1; }
+.ow-pending-dot { margin-left: auto; font-size: 9px; color: #b8c5cf; display: none; }
+.ow-nav-item.is-pending:hover .ow-pending-dot { display: inline; }
+.ow-sidebar-note { margin-top: auto; padding: 28px 16px 20px; color: #b4c0cb; font-size: 10px; display: flex; flex-direction: column; gap: 4px; letter-spacing: .5px; }
+.ow-workspace { min-width: 0; min-height: 0; overflow: auto; grid-row: 3; }
+.ow-strip { display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap; min-height: 46px; padding: 6px 26px; color: var(--ow-muted); font-size: 12px; border-bottom: 1px solid var(--ow-border); background: #fff; }
+.ow-strip-left, .ow-strip-right { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.ow-strip-right { margin-left: auto; }
+.ow-strip-state { display: inline-flex; align-items: center; gap: 7px; color: #16A36A; font-weight: 600; }
+.ow-strip-dot { width: 8px; height: 8px; border-radius: 50%; background: #16A36A; display: inline-block; flex: 0 0 auto; }
+.ow-strip-dot.is-offline { background: #E5484D; }
+.ow-strip-dot.is-unknown { background: #8a99a8; }
+.ow-strip-item { display: inline-flex; align-items: center; gap: 2px; color: var(--ow-muted); white-space: nowrap; }
+.ow-strip-item + .ow-strip-item::before { content: "|"; margin-right: 12px; color: var(--ow-border); }
+.ow-strip-sep { width: 1px; height: 16px; background: var(--ow-border); display: inline-block; }
+.ow-strip .ow-telemetry { color: var(--ow-muted); }
+.ow-strip .ow-telemetry .ow-icon { width: 14px; height: 14px; color: #2f7df6; }
+.ow-strip .ow-updated { white-space: nowrap; font-size: 11px; }
+.ow-refresh-bar { display: flex; justify-content: flex-end; align-items: center; gap: 14px; min-height: 38px; padding: 2px 26px; color: var(--ow-muted); font-size: 11px; }
+.ow-control { display: flex; align-items: center; gap: 4px; font-size: 11px !important; background: transparent; border: 0; padding: 5px 2px; min-height: 28px; }
+.ow-control .ow-icon { width: 12px; height: 12px; }
+.ow-refresh-bar .ow-icon-button { width: 28px; height: 28px; }
+.ow-refresh-bar .ow-icon { width: 15px; height: 15px; }
+.ow-strip .ow-icon-button { width: 30px; height: 30px; }
+.ow-strip .ow-icon-button .ow-icon { width: 16px; height: 16px; }
+.ow-main { padding: 0 26px 10px; }
+.ow-dashboard-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 12px; align-items: stretch; }
+.ow-card { background: white; border: 1px solid var(--ow-border); min-width: 0; border-radius: 16px; }
+.ow-card-heading { display: flex; justify-content: space-between; align-items: center; min-height: 44px; padding: 12px 18px 4px; gap: 12px; }
+.ow-card-heading h2 { font-size: 14px; color: #3f5264; }
+.ow-card-body { padding: 0 18px 14px; }
+.ow-card-note { font-size: 10px; line-height: 1.6; color: var(--ow-muted); margin-top: 8px !important; }
+.ow-route-card { grid-column: span 4; background: var(--ow-blue); padding: 18px 20px; color: #fff; min-height: 132px; border-radius: 16px; display: flex; align-items: center; justify-content: space-between; gap: 14px; min-width: 0; }
+.ow-route-main { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.ow-route-host { font-size: 14px; font-weight: 500; opacity: .95; overflow-wrap: anywhere; }
+.ow-route-state { font-size: 38px; font-weight: 700; line-height: 1.15; }
+.ow-route-label { font-size: 12px; opacity: .92; }
+.ow-route-badge { width: 56px; height: 56px; flex: 0 0 auto; border-radius: 50%; border: 2px solid rgba(255, 255, 255, .8); background: rgba(255, 255, 255, .18); display: inline-flex; align-items: center; justify-content: center; }
+.ow-route-badge .ow-icon { width: 30px; height: 30px; stroke-width: 2; }
+.ow-route-card.is-offline { background: #E5484D; }
+.ow-route-card.is-unknown { background: #7B8794; }
+.ow-speed-card { grid-column: span 4; }
+.ow-rate-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.ow-rate-row .ow-icon { width: 24px; height: 24px; stroke-width: 2.2; }
+.ow-rate-row.upload .ow-icon { color: var(--ow-up); }
+.ow-rate-row.download .ow-icon { color: var(--ow-down); }
+.ow-rate-text { display: flex; flex-direction: column; min-width: 0; }
+.ow-rate-value { font-size: 24px; line-height: 1.25; font-weight: 600; font-variant-numeric: tabular-nums; }
+.ow-rate-label { font-size: 12px; color: var(--ow-muted); }
+.ow-connection-card { grid-column: span 4; }
+.ow-connection-grid { display: grid; grid-template-columns: 1fr 1fr 1fr .8fr; gap: 10px; }
+.ow-metric { display: flex; flex-direction: column; align-items: flex-start; text-align: left; gap: 1px; min-width: 0; background: none; padding: 0; border: 0; border-radius: 0; }
+.ow-metric[href]:hover .ow-metric-label, .ow-metric-button:hover .ow-metric-label { color: var(--ow-blue); text-decoration: underline; }
+.ow-number { font-size: 34px; line-height: 1.3; font-weight: 300; font-variant-numeric: tabular-nums; }
+.ow-metric-label { font-size: 12px; }
+.ow-unavailable { color: #8795a2; }
+.ow-client-types { display: flex; flex-direction: column; justify-content: center; font-size: 13px; gap: 9px; }
+.ow-client-types button { display: flex; align-items: center; gap: 8px; background: none; border: 0; text-align: left; padding: 0; min-height: 24px; }
+.ow-client-types button:hover { color: var(--ow-blue); }
+.ow-type-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex: 0 0 auto; }
+.ow-type-dot.wired { background: #16A36A; }
+.ow-type-dot.wireless { background: #98A2B3; }
+.ow-unknown-clients { font-size: 11px; color: var(--ow-muted); }
+.ow-interfaces-card, .ow-wireless-card { grid-column: span 6; min-height: 208px; }
+.ow-detail { display: inline-flex; gap: 4px; align-items: center; color: #6a7d8e !important; min-width: 28px; min-height: 28px; justify-content: center; font-size: 11px; }
+.ow-detail:hover { color: var(--ow-blue) !important; }
+.ow-detail .ow-icon { width: 18px; height: 18px; }
+.ow-detail-label { display: none; }
+.ow-interface-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.ow-ports { display: flex; flex-wrap: wrap; align-items: flex-start; column-gap: 25px; row-gap: 12px; margin-top: 16px; min-height: 62px; }
+.ow-port { display: flex; flex-direction: column; align-items: center; min-width: 62px; gap: 2px; font-size: 11px; border: 0; background: transparent; box-shadow: none; padding: 5px; margin: 0; height: auto; cursor: pointer; border-radius: 8px; }
+.ow-port:hover, .ow-port[aria-expanded="true"] { background: #edf5fa; }
+.ow-port:focus-visible { outline: 2px solid #287db2; outline-offset: 3px; }
+.ow-port-details { position: fixed; z-index: 1000; width: 420px; max-width: calc(100vw - 24px); max-height: min(70vh, 650px); overflow-y: auto; overscroll-behavior: contain; padding: 14px 16px; border: 1px solid #cbd9e4; border-radius: 12px; background: #fff; color: #24394c; box-shadow: 0 10px 32px #17344d30; font-size: 12px; line-height: 1.6; text-align: left; box-sizing: border-box; }
+.ow-port-details[hidden] { display: none !important; }
+.ow-port-details-heading { position: sticky; top: 0; z-index: 1; background: #fff; box-shadow: 0 -16px 0 #fff; display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 9px; }
+.ow-port-details-heading strong { font-size: 14px; }
+.ow-port-dismiss { display: grid; place-items: center; min-width: 44px; min-height: 44px; padding: 8px; border: 0; border-radius: 8px; background: #edf3f7; color: #344f64; cursor: pointer; }
+.ow-port-dismiss .ow-icon { width: 18px; height: 18px; }
+.ow-port-detail-list { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 5px 10px; margin: 0; }
+.ow-port-detail-list dt { color: #536b80; font-weight: 400; }
+.ow-port-detail-list dd { margin: 0; white-space: pre-line; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.ow-port-details-note { margin: 10px 0 4px !important; color: #536b80; font-size: 12px; }
+.ow-port-settings { display: inline-flex; align-items: center; min-height: 44px; color: #196ea4; }
+@media (max-width: 700px) {
+	/* The hosted theme uses fixed desktop rows; allow the interface tiles to
+	   grow and scroll on touch screens instead of overlapping the next card. */
+	body.console-ui[data-page="admin-console"] .ow-main { overflow-y: auto; }
+	body.console-ui[data-page="admin-console"] .ow-dashboard-grid { flex: 0 0 auto; grid-template-rows: none; grid-auto-rows: auto; }
+	body.console-ui[data-page="admin-console"] .ow-dashboard-grid > * { grid-column: 1 / -1; }
+	body.console-ui[data-page="admin-console"] .ow-graphs-card { min-height: 280px; }
+}
+.ow-port .ow-icon { width: 34px; height: 34px; stroke-width: 1.6; color: #98A2B3; }
+.ow-port.is-up .ow-icon { color: #15ae7b; }
+.ow-port.is-down .ow-icon { color: #ed6173; }
+.ow-port-name { font-size: 12px; color: #42566a; overflow-wrap: anywhere; max-width: 120px; }
+.ow-port-kind { color: var(--ow-muted); font-size: 10px; overflow-wrap: anywhere; max-width: 120px; }
+.ow-port-status { color: var(--ow-muted); font-size: 10px; }
+.ow-port.is-down .ow-port-status { color: #b84356; }
+.ow-wireless-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; text-align: center; padding-top: 7px; }
+.ow-wireless-metric { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.ow-wireless-card a[aria-disabled="true"] { cursor: default; }
+.ow-wireless-ring { width: 74px; height: 74px; display: flex; align-items: center; justify-content: center; border: 1px solid #118ed0; border-radius: 50%; color: #118ed0; position: relative; }
+.ow-wireless-ring .ow-icon { width: 42px; height: 42px; stroke-width: 1; }
+.ow-band-tag { position: absolute; right: 9px; bottom: 12px; background: #fff; font-size: 10px; line-height: 1; }
+.ow-wireless-label { font-size: 11px; }
+.ow-wireless-metric.is-up .ow-wireless-label { color: var(--ow-down); }
+.ow-wireless-metric.is-down .ow-wireless-label { color: #c4495c; }
+.ow-wireless-number { font-size: 28px; font-weight: 300; line-height: 1.2; }
+.ow-protocol-card { grid-column: span 4; }
+.ow-graphs-card { grid-column: span 8; }
+.ow-card select { border: 1px solid #d7dfe6; border-radius: 2px; background: white; font-size: 11px; height: 30px; min-height: 30px; max-width: 155px; padding: 2px 5px; width: auto; }
+.ow-protocol-layout { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 22px; padding: 10px 0 8px; }
+.ow-donut { width: 168px; height: 168px; background: #e9edf2; border-radius: 50%; position: relative; flex-shrink: 0; }
+.ow-donut-center { position: absolute; inset: 20px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 2px; color: var(--ow-muted); font-size: 11px; }
+.ow-donut-value { color: #2f7df6; font-size: 20px; font-weight: 600; white-space: nowrap; }
+.ow-legend { display: flex; flex-direction: column; gap: 10px; flex: 1; min-width: 100px; max-width: 170px; }
+.ow-legend-row { display: flex; align-items: center; gap: 6px; font-size: 11px; }
+.ow-legend-swatch { width: 12px; height: 12px; border-radius: 2px; flex-shrink: 0; }
+.ow-legend-name { flex: 1; }
+.ow-legend-value { font-variant-numeric: tabular-nums; }
+.ow-chart-controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+.ow-graphs-card .ow-card-heading { flex-wrap: wrap; }
+.ow-chart + .ow-chart { margin-top: 16px; }
+.ow-chart { position: relative; }
+.ow-line-chart { touch-action: pan-y; cursor: crosshair; }
+.ow-chart-tooltip { position: absolute; right: 16px; top: 32px; z-index: 2; display: flex; flex-direction: column; gap: 3px; background: #4d535beF; color: #fff; border-radius: 4px; padding: 10px 13px; font-size: 13px; line-height: 1.5; box-shadow: 0 2px 8px #172b3c20; pointer-events: none; max-width: calc(100% - 20px); }
+@media (max-width: 700px) { .ow-chart-tooltip { top: 22px; right: 4px; font-size: 11px; padding: 6px 8px; } }
+.ow-chart-label { color: var(--ow-muted); font-size: 11px; display: flex; gap: 6px; align-items: center; }
+.ow-color-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; }
+.ow-color-dot.upload { background: #1677E8; }
+.ow-color-dot.download { background: #16A36A; }
+.ow-line-chart { width: 100%; height: auto; display: block; overflow: visible; }
+.ow-axis { fill: #637280; font-size: 11px; font-family: inherit; }
+.ow-chart-wait { fill: #728594; font-size: 13px; }
+.ow-page-footer { display: flex; justify-content: space-between; gap: 16px; padding: 15px 0 3px; font-size: 10px; color: var(--ow-muted); }
+.ow-error { background: #fff7e7; border: 1px solid #e2c185; color: #765514; padding: 10px 14px; margin-bottom: 12px; font-size: 12px; }
+.ow-error[hidden] { display: none; }
+.ow-dialog { padding: 22px; border: 1px solid var(--ow-border); background: #fff; color: var(--ow-text); width: min(850px, calc(100% - 32px)); max-height: 80vh; border-radius: 4px; overflow: auto; margin: auto; font: inherit; }
+.ow-dialog::backdrop { background: #14233180; }
+.ow-dialog-header { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.ow-dialog-header h2 { font-size: 18px; }
+.ow-client-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.ow-client-tab { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border: 1px solid var(--ow-border); border-radius: 3px; background: #f5f7f9; color: var(--ow-text); font: inherit; font-size: 12px; cursor: pointer; }
+.ow-client-tab:hover { border-color: var(--ow-blue); color: var(--ow-blue); }
+.ow-client-tab.is-active { background: var(--ow-blue); border-color: var(--ow-blue); color: #fff; }
+.ow-client-tab-count { font-variant-numeric: tabular-nums; }
+.ow-client-ip { display: block; }
+.ow-client-ip + .ow-client-ip { margin-top: 2px; }
+.ow-table-scroll { overflow: auto; margin-top: 14px; }
+.ow-client-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.ow-client-table th, .ow-client-table td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--ow-border); overflow-wrap: anywhere; min-width: 100px; }
+.ow-client-table th { background: #f5f7f9; font-weight: 500; }
+.ow-skip-link { position: fixed; left: 10px; top: -100px; background: white; padding: 10px; color: var(--ow-blue) !important; z-index: 5; }
+.ow-skip-link:focus { top: 6px; }
+.ow-mobile-scrim { display: none; }
+.ow-nav-collapsed { --ow-nav-width: 58px; }
+.ow-nav-collapsed .ow-nav-label, .ow-nav-collapsed .ow-pending-dot, .ow-nav-collapsed .ow-sidebar-note { display: none; }
+@media (min-width: 1600px) {
+	.ow-main { padding: 0 30px 10px; }
+	.ow-route-card { min-height: 174px; }
+	.ow-interfaces-card, .ow-wireless-card { min-height: 270px; }
+	.ow-protocol-layout { padding-top: 40px; }
+	.ow-donut { width: 230px; height: 230px; }
+}
+@media (max-width: 1180px) {
+	.ow-telemetry-row { gap: 10px; }
+	.ow-telemetry { font-size: 11px; }
+	.ow-route-card, .ow-speed-card { grid-column: span 6; }
+	.ow-connection-card { grid-column: span 12; }
+	.ow-card-heading, .ow-card-body { padding-left: 16px; padding-right: 16px; }
+	.ow-wireless-ring { width: 60px; height: 60px; }
+	.ow-wireless-ring .ow-icon { width: 34px; height: 34px; }
+	.ow-wireless-grid { gap: 4px; }
+	.ow-protocol-card { grid-column: span 5; }
+	.ow-graphs-card { grid-column: span 7; }
+	.ow-main { padding-left: 18px; padding-right: 18px; }
+	.ow-header-actions { gap: 8px; }
+}
+@media (max-width: 900px) {
+	.ow-shell { --ow-nav-width: 146px; grid-template-rows: 52px 70px minmax(0, 1fr); }
+	.ow-nav-collapsed { --ow-nav-width: 58px; }
+	.ow-subbar { position: relative; align-items: flex-start; gap: 16px; }
+	.ow-subbar h1 { padding-top: 12px; }
+	.ow-menu-toggle { height: 70px; }
+	.ow-telemetry-row { position: absolute; left: calc(var(--ow-nav-width) + 16px); bottom: 8px; padding-right: 12px; gap: 8px; justify-content: flex-start; }
+	.ow-version { max-width: 230px; }
+	.ow-local-label, .ow-language { display: none; }
+	.ow-nav-item { padding-right: 10px; gap: 12px; }
+	.ow-interfaces-card, .ow-wireless-card { grid-column: span 12; }
+	.ow-protocol-card, .ow-graphs-card { grid-column: span 12; }
+	.ow-interfaces-card, .ow-wireless-card { min-height: 240px; }
+	.ow-protocol-layout { flex-wrap: nowrap; gap: 40px; padding-top: 18px; padding-bottom: 18px; }
+	.ow-legend { max-width: 200px; }
+	.ow-wireless-ring { width: 74px; height: 74px; }
+}
+@media (max-width: 700px) {
+	.ow-shell { --ow-nav-width: 0px; grid-template-columns: minmax(0, 1fr); grid-template-rows: 52px 92px minmax(0, 1fr); }
+	.ow-topbar { padding: 0 14px; gap: 10px; }
+	.ow-brand { gap: 9px; }
+	.ow-brand-name { font-size: 25px; }
+	.ow-version, .ow-header-actions > .ow-icon-button, .ow-session-link { display: none; }
+	.ow-header-actions { gap: 0; }
+	.ow-preview-badge { font-size: 10px; padding: 3px 5px; }
+	.ow-sidebar { position: absolute; width: 180px; top: 144px; bottom: 0; z-index: 4; display: none; }
+	.ow-mobile-open .ow-sidebar { display: flex; }
+	.ow-nav-item { min-height: 46px; }
+	.ow-nav-label { display: block !important; }
+	.ow-mobile-open .ow-mobile-scrim { display: block; position: absolute; inset: 144px 0 0 180px; border: 0; border-radius: 0; background: #17253566; z-index: 3; }
+	.ow-menu-toggle { width: 48px; height: 44px; background: white; color: var(--ow-blue) !important; }
+	.ow-subbar h1 { font-size: 15px; }
+	.ow-telemetry-row { left: 16px; right: 12px; bottom: 9px; gap: 4px 12px; padding: 0; }
+	.ow-telemetry { font-size: 11px; }
+	.ow-main { padding: 0 12px 12px; }
+	.ow-refresh-bar { padding: 3px 12px; gap: 9px; font-size: 10px; }
+	.ow-dashboard-grid { gap: 10px; }
+	.ow-route-card { padding: 18px; min-height: 172px; }
+	.ow-route-state { font-size: 30px; }
+	.ow-rate-value { font-size: 20px; }
+	.ow-number { font-size: 28px; }
+	.ow-connection-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+	.ow-client-types { grid-column: 1 / -1; flex-direction: row; justify-content: flex-start; gap: 24px; padding-top: 8px; }
+	.ow-card-heading { padding-top: 12px; padding-left: 14px; padding-right: 14px; min-height: 51px; }
+	.ow-card-heading h2 { font-size: 13px; }
+	.ow-card-body { padding-left: 14px; padding-right: 14px; }
+	.ow-wireless-ring { width: 60px; height: 60px; }
+	.ow-wireless-label { font-size: 10px; }
+	.ow-wireless-number { font-size: 26px; }
+	.ow-protocol-layout { gap: 20px; }
+	.ow-donut { width: 174px; height: 174px; }
+	.ow-donut-center { inset: 21px; }
+	.ow-donut-value { font-size: 21px; }
+	.ow-legend { min-width: 85px; }
+	.ow-line-chart { min-height: 100px; }
+	.ow-card select { max-width: 128px; }
+	.ow-page-footer { font-size: 9px; gap: 8px; }
+	.ow-ports { column-gap: 18px; }
+}
+@media (prefers-reduced-motion: reduce) { .ow-shell *, .ow-shell *::before, .ow-shell *::after { animation: none !important; transition: none !important; } }

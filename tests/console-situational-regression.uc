@@ -1,0 +1,42 @@
+// Run against the isolated mock-situational / test-security modules, never the live DB.
+import * as s from '/tmp/mock-situational.uc';
+import { query,sqlExec } from '/tmp/test-security.uc';
+import { readfile,writefile } from 'fs';
+function check(v,msg) { if(!v) die('FAIL: '+msg+'\n'); print('PASS: '+msg+'\n'); }
+const now=time();
+function counters(gen,n) { writefile('/tmp/fixture-counters.json',sprintf('%J',{nftables:[{counter:{name:'threats_in',comment:gen,packets:n}},{counter:{name:'threats_fwd_in',packets:0}},{counter:{name:'threats_fwd_out',packets:0}}]})); }
+sqlExec('DROP TABLE IF EXISTS threat_baseline; DROP TABLE IF EXISTS threat_packets; DROP TABLE IF EXISTS threat_meta;');
+counters('first',100); s.persistThreatPackets(now);
+counters('first',125); s.persistThreatPackets(now+1); s.persistThreatPackets(now+1);
+check(s.packetHistory(now+2).total24==25,'同一计数快照重试只增加一次');
+counters('second',500); s.persistThreatPackets(now+2);
+check(s.packetHistory(now+3).total24==525,'重建计数器且新值大于旧值仍正确');
+counters('second',3); s.persistThreatPackets(now+3);
+check(s.packetHistory(now+4).total24==528,'计数器被外部清零后继续累计');
+const up=+(split(readfile('/proc/uptime'),' ')[0]);
+const line=' CST:tin IN=eth1 OUT= SRC=8.8.8.8 DST=192.168.1.1 PROTO=TCP SPT=123 DPT=80';
+writefile('/tmp/fixture-kernel.log','['+int(up)+'.111111]'+line+'\n['+int(up)+'.222222]'+line+'\n');
+check(length(s.kernelEvents())==2,'双日志源去重且同秒同五元组两包都保留（无MAC字段）');
+s.collectEvents(now,now+1000);
+check(+query("SELECT COUNT(*) AS n FROM events WHERE src='1.1.1.1';")[0].n==1,'旧库迁移保留29天历史');
+check(+query("SELECT COUNT(*) AS n FROM events WHERE src='1.0.0.1';")[0].n==0,'清理超过30天历史');
+const first=+query('SELECT COUNT(*) AS n FROM events;')[0].n;
+s.collectEvents(now,now+1000);
+check(+query('SELECT COUNT(*) AS n FROM events;')[0].n==first,'持久化事件ID重试幂等且不依赖整秒水位');
+sqlExec("INSERT INTO events_quarantine SELECT *, 'isolated regression sample' FROM events WHERE src='8.8.8.8' LIMIT 1; DELETE FROM events WHERE id IN(SELECT id FROM events_quarantine);");
+s.collectEvents(now,0);
+check(+query('SELECT COUNT(*) AS n FROM events;')[0].n==first-1,'隔离的测试事件不会被旧内核日志再次回灌');
+sqlExec("WITH RECURSIVE seq(x) AS (VALUES(1) UNION ALL SELECT x+1 FROM seq WHERE x<21001) INSERT INTO events SELECT 'bulk:'||x,"+now+",'threat','tin','8.8.4.4','192.168.1.1','TCP','1','80' FROM seq;");
+let n=0; for(let e in s.storedEvents(86400)) n+=+e.n;
+check(n>21000,'超过2万条仍完整统计');
+sqlExec("INSERT INTO events VALUES('legacy:counter-check',"+now+",'threat','tin','9.9.9.9','192.168.1.1','TCP','1','80');");
+const o=s.overview(); let sum=0; for(let x in o.series) sum+=x.region+x.threat;
+check(o.stats.total24==sum,'高数据量的统计与时间线一致');
+check(o.stats.legacy24==1 && length(filter(o.warnings,w=>index(w,'旧格式')>=0))==1,'旧格式历史记录单独计数并提示不可逐包核准');
+sqlExec("INSERT INTO events VALUES('device-a',"+now+",'threat','tfo','2001:db8::1','8.8.8.8','TCP','123','443'); INSERT INTO events VALUES('device-b',"+now+",'threat','tfo','2001:db8::2','8.8.8.8','TCP','123','443');");
+const groups=filter(s.overview().dirTop.fwd_out.top,e=>e.src=='8.8.8.8');
+check(length(groups)==2 && groups[0].devIp!=groups[1].devIp,'同一黑名单目标的不同IPv6内网设备分别统计');
+let padding=''; for(let i=0;i<5000;i++) padding+='0123456789012345678901234567890123456789012345678901234567890123';
+sqlExec('BEGIN; CREATE TABLE large_transaction(n INTEGER); /*'+padding+'*/ INSERT INTO large_transaction VALUES(1); COMMIT;');
+check(+query('SELECT COUNT(*) AS n FROM large_transaction;')[0].n==1,'超过128KiB的事务通过标准输入写库');
+print('ALL REGRESSION CHECKS PASSED\n');

@@ -1,0 +1,5 @@
+#!/bin/sh
+chmod 0755 /etc/init.d/console-traffic
+/etc/init.d/console-traffic enable
+/etc/init.d/console-traffic start
+exit 0

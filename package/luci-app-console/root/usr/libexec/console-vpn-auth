@@ -1,0 +1,8 @@
+#!/usr/bin/ucode
+// SPDX-License-Identifier: Apache-2.0
+import { readfile } from 'fs';
+import { verify } from 'console.vpn-accounts';
+const input = ARGV[0] ? readfile(ARGV[0]) : null;
+if (input == null || length(input) > 1024) exit(1);
+const lines = split(input, '\n');
+try { exit(length(lines) >= 2 && verify(lines[0], lines[1]) ? 0 : 1); } catch (e) { exit(1); }

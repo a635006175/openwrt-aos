@@ -1,0 +1,702 @@
+{#
+ Copyright 2022 Jo-Philipp Wich <jo@mein.io>
+ Licensed to the public under the Apache License 2.0.
+-#}
+
+{% include('header', { blank_page: true }) %}
+
+{# Hidden native form keeps LuCI's POST contract (luci_username / luci_password)
+   plus any auth plugin fields fully intact. #}
+<section hidden>
+	<form method="post" class="cbi-map">
+		<div class="cbi-section">
+			<div class="cbi-section-node">
+				<div class="cbi-value">
+					<label class="cbi-value-title" for="luci_username">{{ _('Username') }}</label>
+					<div class="cbi-value-field">
+						<input name="luci_username" id="luci_username" type="text" autocomplete="username" value="{{ entityencode(duser, true) }}">
+					</div>
+				</div>
+				<div class="cbi-value">
+					<label class="cbi-value-title" for="luci_password">{{ _('Password') }}</label>
+					<div class="cbi-value-field">
+						<input name="luci_password" id="luci_password" type="password" autocomplete="current-password">
+					</div>
+				</div>
+				{% if (auth_fields): %}
+					{% for (let field in auth_fields): %}
+						<div class="cbi-value">
+							<label class="cbi-value-title" for="{{ field.name }}">{{ _(field.label ?? field.name) }}</label>
+							<div class="cbi-value-field">
+								<input
+									name="{{ field.name }}"
+									id="{{ field.name }}"
+									type="{{ field.type ?? 'text' }}"
+									{% if (field.placeholder): %}placeholder="{{ field.placeholder }}"{% endif %}
+									{% if (field.inputmode): %}inputmode="{{ field.inputmode }}"{% endif %}
+									{% if (field.pattern): %}pattern="{{ field.pattern }}"{% endif %}
+									{% if (field.maxlength): %}maxlength="{{ field.maxlength }}"{% endif %}
+									{% if (field.autocomplete): %}autocomplete="{{ field.autocomplete }}"{% endif %}
+									{% if (field.required): %}required{% endif %}
+								>
+							</div>
+						</div>
+					{% endfor %}
+				{% endif %}
+				{% if (auth_html): %}
+					<div class="cbi-value">
+						{{ auth_html }}
+					</div>
+				{% endif %}
+				{% if (auth_assets): %}
+					{% for (let asset in auth_assets): %}
+						{% if (asset.type == 'script'): %}
+							<script src="{{ asset.src }}"></script>
+						{% endif %}
+					{% endfor %}
+				{% endif %}
+			</div>
+		</div>
+	</form>
+
+	<hr>
+
+	{% if (auth_message): %}
+	<div class="alert-message{% if (auth_plugin): %} warning{% endif %}">
+		{{ auth_message }}
+	</div>
+	{% elif (fuser): %}
+	<div class="alert-message error">
+		{{ _('Invalid username and/or password! Please try again.') }}
+	</div>
+	{% endif %}
+
+	<button class="btn cbi-button-positive important" type="submit">{{ _('Log in') }}</button>
+</section>
+
+{#
+ Full-page login restyled after the supplied AOS reference SVG:
+   background  gradient sky + dot grid + soft corner glows + wave curves
+   left        tagline block and the concentric orbit / network illustration
+   right       rounded white login card with gradient brand tile and button
+ The visible form mirrors the hidden native one, so the POST payload keeps
+ exactly luci_username / luci_password plus any plugin auth fields.
+#}
+<div class="login-page">
+	<svg class="login-bg" viewBox="0 0 1440 810" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+		<defs>
+			<linearGradient id="login-g-bg" x1="0" y1="0" x2="1" y2="1">
+				<stop offset="0%" stop-color="#F5FAFF"/>
+				<stop offset="100%" stop-color="#E8F5FF"/>
+			</linearGradient>
+			<linearGradient id="login-g-blue" x1="0" y1="0" x2="1" y2="1">
+				<stop offset="0%" stop-color="#367DF4"/>
+				<stop offset="100%" stop-color="#19C6D6"/>
+			</linearGradient>
+			<pattern id="login-g-dots" width="26" height="26" patternUnits="userSpaceOnUse">
+				<circle cx="2" cy="2" r="1.3" fill="#8DB5E9" opacity="0.4"/>
+			</pattern>
+		</defs>
+		<rect width="1440" height="810" fill="url(#login-g-bg)"/>
+		<circle cx="40" cy="40" r="340" fill="#C7E6FF" opacity="0.28"/>
+		<circle cx="1400" cy="780" r="340" fill="#B9F2EA" opacity="0.26"/>
+		<rect width="1440" height="810" fill="url(#login-g-dots)" opacity="0.45"/>
+		<path d="M0 670 Q280 570 520 730 T1020 700 T1440 660 L1440 810 L0 810Z" fill="#D7EDFF" opacity="0.48"/>
+		<path d="M0 725 Q260 620 510 750 T1050 740 T1440 700" stroke="#78C9EC" stroke-width="1.5" fill="none" opacity="0.45"/>
+		<path d="M0 755 Q270 650 540 780 T1090 770 T1440 735" stroke="#83C5FF" stroke-width="1.2" fill="none" opacity="0.45"/>
+	</svg>
+
+	<div class="login-row">
+		<div class="login-left">
+			<div class="login-tagline">
+				<div class="login-tagline-en">AOS / NETWORK INTELLIGENCE</div>
+				<h1 class="login-title">AOS智能路由系统</h1>
+				<p class="login-subtitle">智能连接 · 高效调度 · 安全管理</p>
+				<span class="login-title-bar"></span>
+			</div>
+
+			<div class="login-orbits" aria-hidden="true">
+				<svg viewBox="160 160 500 500" focusable="false">
+					<g fill="none" stroke-linecap="round">
+						<circle cx="410" cy="410" r="245" stroke="#75B8F3" stroke-width="1.4" opacity="0.22"/>
+						<circle cx="410" cy="410" r="150" stroke="#60B6E9" stroke-width="1.5" opacity="0.3"/>
+					</g>
+					<g class="login-orbit-spin" fill="none" stroke-linecap="round">
+						<circle cx="410" cy="410" r="205" stroke="#4C9BE9" stroke-width="1.3" stroke-dasharray="5 10" opacity="0.35"/>
+						<path d="M165 410 L410 260 L650 410 L410 560Z" stroke="#7DB9E9" stroke-width="1.2" opacity="0.35"/>
+						<path d="M410 165 V655 M165 410 H660" stroke="#8EBDE9" stroke-width="1" stroke-dasharray="4 9" opacity="0.25"/>
+					</g>
+					<g fill="none" stroke-linecap="round">
+						<ellipse cx="410" cy="410" rx="250" ry="105" stroke="#46B5D5" stroke-width="1.5" transform="rotate(-32 410 410)" opacity="0.55"/>
+						<ellipse cx="410" cy="410" rx="250" ry="105" stroke="#5995F0" stroke-width="1.5" transform="rotate(32 410 410)" opacity="0.5"/>
+						<path d="M205 290 L410 410 L620 275 M205 530 L410 410 L620 545" stroke="#80C4E7" stroke-width="1.4" opacity="0.5"/>
+					</g>
+					<g fill="#FFFFFF" stroke="#65A9ED" stroke-width="2">
+						<circle cx="410" cy="165" r="7"/>
+						<circle cx="650" cy="410" r="7"/>
+						<circle cx="410" cy="655" r="7"/>
+						<circle cx="165" cy="410" r="7"/>
+						<circle cx="245" cy="260" r="6"/>
+						<circle cx="565" cy="260" r="6"/>
+						<circle cx="245" cy="560" r="6"/>
+						<circle cx="565" cy="560" r="6"/>
+					</g>
+					<circle cx="410" cy="410" r="87" fill="#FFFFFF" opacity="0.7"/>
+					<circle cx="410" cy="410" r="70" fill="none" stroke="#8BD7E7" stroke-width="1.5"/>
+					<circle cx="410" cy="410" r="56" fill="url(#login-g-blue)" opacity="0.12"/>
+					<path d="M410 365 L450 388 L450 432 L410 455 L370 432 L370 388Z" fill="url(#login-g-blue)"/>
+					<path d="M410 379 L437 395 L437 425 L410 441 L383 425 L383 395Z" fill="#FFFFFF" opacity="0.18"/>
+					<text x="410" y="420" text-anchor="middle" font-size="23" font-weight="800" fill="#FFFFFF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">AOS</text>
+					<g fill="url(#login-g-blue)">
+						<circle cx="290" cy="325" r="5"/>
+						<circle cx="510" cy="305" r="5"/>
+						<circle cx="535" cy="495" r="5"/>
+						<circle cx="285" cy="500" r="5"/>
+					</g>
+					<g fill="none" stroke="#43A9D9" stroke-width="2.5" stroke-linecap="round">
+						<path d="M285 325 L320 348 L350 348"/>
+						<path d="M510 305 L475 340 L460 355"/>
+						<path d="M535 495 L480 465 L465 455"/>
+						<path d="M285 500 L335 470 L355 458"/>
+					</g>
+					<g fill="#FFFFFF" stroke="#4D9DE8" stroke-width="2">
+						<circle cx="350" cy="348" r="6"/>
+						<circle cx="460" cy="355" r="6"/>
+						<circle cx="465" cy="455" r="6"/>
+						<circle cx="355" cy="458" r="6"/>
+					</g>
+				</svg>
+				<div class="login-orbit-words">
+					<span>CONNECT</span><i></i><span>ROUTE</span><i></i><span>CONTROL</span>
+				</div>
+			</div>
+		</div>
+
+		<div class="login-card">
+			<div class="login-brand">
+				<span class="login-brand-icon" aria-hidden="true">
+					<svg viewBox="0 0 40 40" focusable="false">
+						<rect width="40" height="40" rx="11" fill="url(#login-g-blue)"/>
+						<path d="M11 19 L20 13 L29 19 M11 25 L20 19 L29 25" stroke="#FFFFFF" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+						<circle cx="20" cy="30" r="2.4" fill="#FFFFFF"/>
+					</svg>
+				</span>
+				<span class="login-brand-name">AOS智能路由系统</span>
+			</div>
+			<p class="login-welcome">欢迎登录管理控制台</p>
+			<div class="login-divider"></div>
+
+			{% if (auth_message): %}
+			<div class="login-alert{% if (auth_plugin): %} login-alert-warn{% endif %}">{{ auth_message }}</div>
+			{% elif (fuser): %}
+			<div class="login-alert login-alert-error">{{ _('Invalid username and/or password! Please try again.') }}</div>
+			{% endif %}
+
+			<form class="login-form" method="post">
+				<label class="login-label" for="luci_username_v">用户名</label>
+				<div class="login-input">
+					<span class="login-input-icon" aria-hidden="true">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" focusable="false">
+							<circle cx="12" cy="9" r="4.2"/>
+							<path d="M5.5 20 Q6 14.5 12 14.5 Q18 14.5 18.5 20"/>
+						</svg>
+					</span>
+					<input id="luci_username_v" name="luci_username" type="text" autocomplete="username"
+						value="{{ entityencode(duser, true) }}" placeholder="用户名">
+				</div>
+
+				<label class="login-label" for="luci_password_v">密码</label>
+				<div class="login-input">
+					<span class="login-input-icon" aria-hidden="true">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" focusable="false">
+							<rect x="5.5" y="10.5" width="13" height="9.5" rx="2.4"/>
+							<path d="M8.5 10.5 V8.5 A3.5 3.5 0 0 1 15.5 8.5 V10.5"/>
+						</svg>
+					</span>
+					<input id="luci_password_v" name="luci_password" type="password" autocomplete="current-password"
+						placeholder="密码">
+					<button type="button" class="login-eye" aria-label="显示密码" aria-pressed="false" tabindex="-1">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" focusable="false">
+							<path d="M3 12 Q8 6.5 12 6.5 T21 12 Q16 17.5 12 17.5 T3 12Z"/>
+							<circle cx="12" cy="12" r="2.4"/>
+							<path class="login-eye-slash" d="M4.5 20 L19.5 4.5"/>
+						</svg>
+					</button>
+				</div>
+
+				{% if (auth_fields): %}
+					{% for (let field in auth_fields): %}
+						<label class="login-label" for="{{ field.name }}">{{ _(field.label ?? field.name) }}</label>
+						<div class="login-input login-input-plain">
+							<input
+								id="{{ field.name }}"
+								name="{{ field.name }}"
+								type="{{ field.type ?? 'text' }}"
+								{% if (field.placeholder): %}placeholder="{{ field.placeholder }}"{% endif %}
+								{% if (field.inputmode): %}inputmode="{{ field.inputmode }}"{% endif %}
+								{% if (field.pattern): %}pattern="{{ field.pattern }}"{% endif %}
+								{% if (field.maxlength): %}maxlength="{{ field.maxlength }}"{% endif %}
+								{% if (field.autocomplete): %}autocomplete="{{ field.autocomplete }}"{% endif %}
+								{% if (field.required): %}required{% endif %}
+							>
+						</div>
+					{% endfor %}
+				{% endif %}
+
+				{% if (auth_html): %}
+					<div class="login-extra">{{ auth_html }}</div>
+				{% endif %}
+
+				<button type="submit" class="login-submit" data-busy-label="{{ _('Logging in…') }}">登 录</button>
+			</form>
+
+			<p class="login-footnote">AOS NETWORK MANAGEMENT PLATFORM</p>
+			<p class="login-status"><i></i>安全连接 · 系统服务正常</p>
+
+			{% if (auth_assets): %}
+				{% for (let asset in auth_assets): %}
+					{% if (asset.type == 'script'): %}
+						<script src="{{ asset.src }}"></script>
+					{% endif %}
+				{% endfor %}
+			{% endif %}
+		</div>
+	</div>
+</div>
+
+<style>
+	/* AOS-style full-page login, scoped so the rest of LuCI is untouched. */
+	body.console-ui.login-body { overflow: hidden; background: #EEF6FE; }
+
+	.login-page {
+		position: fixed;
+		inset: 0;
+		z-index: 60;
+		overflow: hidden;
+		overscroll-behavior: none;
+		display: flex;
+		color-scheme: light;
+		font-family: "Microsoft YaHei UI", "Microsoft YaHei", "PingFang SC", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+		font-weight: 430;
+		color: #1a1c1f;
+	}
+
+	.login-bg {
+		position: fixed;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		z-index: -1;
+		pointer-events: none;
+	}
+
+	.login-row {
+		display: flex;
+		align-items: stretch;
+		justify-content: space-between;
+		width: 100%;
+		height: 100%;
+		min-height: 0;
+		margin: 0;
+		padding: clamp(12px, 2.4vh, 24px) 0;
+		box-sizing: border-box;
+	}
+
+	/* ---------- left column ---------- */
+	.login-left {
+		flex: 1 1 auto;
+		min-width: 0;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		padding: 0 4%;
+	}
+
+	/* Keep the tagline and the illustration on a shared, centered column. */
+	.login-tagline { width: min(560px, 100%); }
+
+	.login-tagline-en {
+		font-size: 15px;
+		font-weight: 700;
+		letter-spacing: 4px;
+		color: #3789D8;
+	}
+
+	.login-title {
+		margin: clamp(14px, 3vh, 30px) 0 0;
+		font-size: clamp(28px, 2.6vw, 39px);
+		font-weight: 700;
+		line-height: 1.25;
+		color: #172E50;
+	}
+
+	.login-subtitle {
+		margin: clamp(8px, 1.2vh, 12px) 0 0;
+		font-size: clamp(16px, 1.5vw, 20px);
+		color: #6D839D;
+	}
+
+	.login-title-bar {
+		display: block;
+		width: 70px;
+		height: 4px;
+		border-radius: 2px;
+		margin-top: clamp(14px, 2.8vh, 28px);
+		background: linear-gradient(135deg, #367DF4, #19C6D6);
+	}
+
+	.login-orbits {
+		margin-top: clamp(-34px, -3.4vh, -12px);
+		width: 100%;
+		max-width: 560px;
+	}
+
+	.login-orbits > svg {
+		display: block;
+		width: min(486px, 58vh);
+		max-width: 100%;
+		height: auto;
+		margin-left: 55px;
+	}
+
+	.login-orbit-spin {
+		transform-origin: 410px 410px;
+		animation: login-orbit-rotate 48s linear infinite;
+	}
+
+	@keyframes login-orbit-rotate {
+		from { transform: rotate(0deg); }
+		to   { transform: rotate(360deg); }
+	}
+
+	.login-orbit-words {
+		display: flex;
+		align-items: center;
+		gap: 14px;
+		margin-top: 2px;
+		font-size: 11px;
+		letter-spacing: 3px;
+		color: #3788D6;
+		opacity: 0.65;
+	}
+	.login-orbit-words i { flex: 0 0 18px; height: 1.5px; background: #63A8E5; }
+
+	/* ---------- right column / card ---------- */
+	.login-card {
+		flex: 0 0 585px;
+		width: 585px;
+		max-width: 46%;
+		align-self: center;
+		box-sizing: border-box;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		background: linear-gradient(135deg, #FFFFFF 0%, #FAFCFF 100%);
+		border: 2px solid #FFFFFF;
+		border-radius: 28px;
+		box-shadow: 0 18px 48px rgba(90, 140, 190, 0.14);
+		padding: clamp(24px, 5.2vh, 52px) clamp(32px, 4.2vw, 60px) clamp(16px, 3.2vh, 32px);
+		margin-right: 5.9%;
+		max-height: 100%;
+	}
+
+	.login-brand {
+		display: flex;
+		align-items: center;
+		gap: clamp(14px, 1.7vw, 23px);
+	}
+
+	.login-brand-icon { flex: 0 0 clamp(40px, 5.4vh, 53px); width: clamp(40px, 5.4vh, 53px); height: clamp(40px, 5.4vh, 53px); display: block; }
+	.login-brand-icon svg { width: 100%; height: 100%; display: block; }
+
+	.login-brand-name {
+		font-size: clamp(23px, 2.2vw, 30px);
+		font-weight: 750;
+		line-height: 1.2;
+		color: #172E50;
+	}
+
+	.login-welcome {
+		margin: clamp(12px, 3.2vh, 34px) 0 0;
+		font-size: clamp(13px, 1.7vh, 15px);
+		color: #91A1B5;
+	}
+
+	.login-divider {
+		width: 100%;
+		height: 1.5px;
+		background: #E8EFF7;
+		margin: clamp(12px, 2.4vh, 24px) 0 clamp(14px, 3vh, 30px);
+	}
+
+	.login-alert {
+		font-size: 13px;
+		line-height: 1.5;
+		border: 1px solid #F3C9C4;
+		color: #B4423A;
+		background: #FDF3F2;
+		border-radius: 10px;
+		padding: 10px 14px;
+		margin-bottom: 18px;
+	}
+	.login-alert-warn {
+		border-color: #F0D8A8;
+		color: #A4702A;
+		background: #FCF6EA;
+	}
+
+	.login-form { width: 100%; }
+
+	.login-label {
+		display: block;
+		font-size: clamp(14px, 1.8vh, 15px);
+		font-weight: 600;
+		color: #52677F;
+		margin: 0 0 clamp(6px, 1.2vh, 10px);
+	}
+
+	.login-input {
+		position: relative;
+		margin-bottom: clamp(14px, 2.8vh, 26px);
+	}
+
+	.login-input input {
+		width: 100%;
+		height: clamp(46px, 6.6vh, 58px);
+		border: 1.5px solid #DCE6F1;
+		border-radius: 11px;
+		background: #F9FBFE;
+		padding: 0 46px 0 56px;
+		font-size: clamp(15px, 2vh, 17px);
+		font-family: inherit;
+		color: #293E57;
+		box-sizing: border-box;
+		outline: none;
+		transition: border-color .15s, box-shadow .15s, background .15s;
+	}
+	.login-input-plain input { padding-left: 16px; }
+	.login-input input:hover { border-color: #BBD2EA; }
+	.login-input input:focus {
+		border-color: #3688EF;
+		background: #FFFFFF;
+		box-shadow: 0 0 0 3px rgba(54, 136, 239, 0.14);
+	}
+	.login-input input::placeholder { color: #A6B4C6; }
+
+	.login-input-icon {
+		position: absolute;
+		left: 18px;
+		top: 50%;
+		transform: translateY(-50%);
+		width: 24px;
+		height: 24px;
+		color: #8BA0B8;
+		line-height: 0;
+	}
+	.login-input-icon svg { width: 100%; height: 100%; display: block; }
+
+	.login-eye {
+		position: absolute;
+		right: 12px;
+		top: 50%;
+		transform: translateY(-50%);
+		width: 34px;
+		height: 34px;
+		border: 0;
+		padding: 0;
+		background: transparent;
+		color: #8BA0B8;
+		cursor: pointer;
+		border-radius: 8px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.login-eye svg { width: 22px; height: 22px; display: block; }
+	.login-eye:hover { color: #3988E9; background: rgba(54, 136, 239, 0.08); }
+	.login-eye.on { color: #3688EF; }
+	.login-eye .login-eye-slash { display: block; }
+	.login-eye.on .login-eye-slash { display: none; }
+
+	.login-extra { margin-bottom: 20px; }
+
+	.login-submit {
+		width: 100%;
+		height: clamp(48px, 7.2vh, 62px);
+		border: 0;
+		border-radius: 12px;
+		background: linear-gradient(135deg, #367DF4, #19C6D6);
+		color: #FFFFFF;
+		font-size: clamp(17px, 2.3vh, 20px);
+		font-weight: 700;
+		letter-spacing: 5px;
+		text-indent: 5px;
+		font-family: inherit;
+		cursor: pointer;
+		transition: filter .15s, transform .05s, box-shadow .15s;
+		box-shadow: 0 10px 22px rgba(54, 125, 244, 0.28);
+	}
+	.login-submit:hover { filter: brightness(1.06); box-shadow: 0 12px 26px rgba(54, 125, 244, 0.34); }
+	.login-submit:active { transform: translateY(1px); }
+	.login-submit:focus-visible { outline: 2px solid #172E50; outline-offset: 3px; }
+	.login-submit[disabled] { opacity: .7; cursor: default; transform: none; letter-spacing: 1px; }
+
+	.login-footnote {
+		width: 100%;
+		margin: clamp(16px, 4vh, 44px) 0 0;
+		text-align: center;
+		font-size: 12px;
+		letter-spacing: 1px;
+		color: #9BAABD;
+	}
+
+	.login-status {
+		width: 100%;
+		margin: clamp(8px, 1.4vh, 12px) 0 0;
+		font-size: 11px;
+		color: #91A2B4;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+	}
+	.login-status i {
+		width: 6px;
+		height: 6px;
+		border-radius: 50%;
+		background: #27BFAE;
+		display: inline-block;
+	}
+
+	@media (max-width: 1180px) {
+		.login-card { width: 500px; padding: clamp(24px, 4.4vh, 36px) clamp(28px, 3.6vw, 42px) clamp(16px, 2.8vh, 26px); }
+		.login-brand-name { font-size: 25px; }
+		.login-card { margin-right: 4%; }
+	}
+
+	@media (max-width: 980px) {
+		body.console-ui.login-body { overflow: auto; }
+		.login-page { position: absolute; overflow-y: auto; }
+		.login-row { flex-direction: column; justify-content: flex-start; height: auto; padding: 30px 14px 40px; }
+		.login-left { flex: none; width: 100%; padding: 0 4%; }
+		.login-orbits { display: none; }
+		.login-orbit-words { margin-top: 22px; }
+		.login-title { font-size: 30px; margin-top: 18px; }
+		.login-subtitle { font-size: 16px; }
+		.login-title-bar { margin-top: 18px; }
+		.login-card { flex: none; width: 100%; max-width: 520px; margin: 24px auto 0; padding: 30px 26px 22px; }
+	}
+
+	@media (max-width: 520px) {
+		.login-card { border-radius: 22px; padding: 26px 20px 20px; }
+		.login-brand-name { font-size: 21px; }
+		.login-brand { gap: 14px; }
+		.login-brand-icon { flex-basis: 44px; width: 44px; height: 44px; }
+		.login-title { font-size: 25px; }
+		.login-input input { height: 52px; font-size: 16px; }
+		.login-submit { height: 54px; font-size: 18px; }
+		.login-footnote { margin-top: 26px; }
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.login-orbit-spin { animation: none; }
+	}
+</style>
+
+<script>
+	// Wire the styled form to the hidden native LuCI form so the standard POST
+	// payload (luci_username / luci_password + plugin auth fields) is preserved.
+	(function () {
+		var hiddenForm = document.querySelector('section[hidden] form');
+		var visibleForm = document.querySelector('.login-form');
+		var page = document.querySelector('.login-page');
+
+		if (!hiddenForm || !visibleForm)
+			return;
+
+		document.body.classList.add('login-body');
+
+		var submitButton = visibleForm.querySelector('.login-submit');
+		var busy = false;
+
+		function collect() {
+			visibleForm.querySelectorAll('input[name], select[name], textarea[name]').forEach(function (node) {
+				var twin = hiddenForm.querySelector('[name="' + node.name + '"]');
+				if (!twin)
+					return;
+
+				if (node.type === 'checkbox' || node.type === 'radio') {
+					if (node.type === 'radio' ? node.checked : node.checked)
+						twin.checked = true;
+				}
+				else {
+					twin.value = node.value;
+				}
+			});
+		}
+
+		function submit() {
+			if (busy)
+				return;
+			busy = true;
+
+			if (submitButton) {
+				submitButton.disabled = true;
+				if (submitButton.dataset.busyLabel)
+					submitButton.textContent = submitButton.dataset.busyLabel;
+			}
+
+			collect();
+			hiddenForm.submit();
+		}
+
+		visibleForm.addEventListener('submit', function (ev) {
+			ev.preventDefault();
+			submit();
+		});
+
+		visibleForm.addEventListener('keydown', function (ev) {
+			if (ev.key === 'Enter' && ev.target && ev.target.tagName === 'INPUT') {
+				ev.preventDefault();
+				submit();
+			}
+		});
+
+		var legacyButton = document.querySelector('section[hidden] button');
+		if (legacyButton)
+			legacyButton.addEventListener('click', function (ev) {
+				ev.preventDefault();
+				submit();
+			});
+
+		var password = visibleForm.querySelector('input[name="luci_password"]');
+		var username = visibleForm.querySelector('input[name="luci_username"]');
+		var eye = visibleForm.querySelector('.login-eye');
+
+		if (eye && password)
+			eye.addEventListener('click', function () {
+				var reveal = password.type === 'password';
+				password.type = reveal ? 'text' : 'password';
+				eye.classList.toggle('on', reveal);
+				eye.setAttribute('aria-pressed', reveal ? 'true' : 'false');
+				eye.setAttribute('aria-label', reveal ? '隐藏密码' : '显示密码');
+				password.focus();
+			});
+
+		if (page) {
+			page.addEventListener('animationend', function () {}, false);
+		}
+
+		window.requestAnimationFrame(function () {
+			if (password && password.value === '' && username && username.value === '') {
+				username.focus();
+			}
+			else if (password) {
+				password.focus();
+			}
+		});
+	})();
+</script>
+
+{% include('footer', { blank_page: true }) %}

@@ -1,0 +1,13 @@
+{
+	"luci-app-console-vpn": {
+		"description": "Manage OpenVPN accounts",
+		"read": { "ubus": {
+			"console-vpn-accounts": [ "list" ],
+			"console-vpn": [ "server_get", "client_get", "profile_export", "ca_export", "status_detail", "client_inspect" ]
+		} },
+		"write": { "ubus": {
+			"console-vpn-accounts": [ "save", "remove" ],
+			"console-vpn": [ "server_apply", "client_apply", "client_stop", "client_import" ]
+		} }
+	}
+}

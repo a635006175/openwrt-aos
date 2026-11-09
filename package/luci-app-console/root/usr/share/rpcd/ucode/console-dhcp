@@ -1,0 +1,21 @@
+// SPDX-License-Identifier: Apache-2.0
+import { currentState, apply, validate } from 'console.dhcp-state';
+
+return { 'console-dhcp': {
+	state: { call: () => {
+		try { return { state: currentState() }; }
+		catch (e) { return { error: e.message || '读取 DHCP 配置失败' }; }
+	} },
+	// 只校验不写入：供页面预检查使用。
+	check: { args: { config: {} }, call: req => {
+		try { validate(req.args.config); return { ok: true }; }
+		catch (e) { return { error: e.message || '校验失败' }; }
+	} },
+	apply: { args: { config: {} }, call: req => {
+		try {
+			const result = apply(req.args.config);
+			return { ok: true, state: result.state, restarted: result.restarted };
+		}
+		catch (e) { return { error: e.message || '应用 DHCP 配置失败' }; }
+	} }
+} };

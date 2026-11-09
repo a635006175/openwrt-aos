@@ -1,0 +1,29 @@
+{
+  "luci-app-console-mihomo": {
+    "description": "Manage console Mihomo proxy",
+    "read": {
+      "ubus": {
+        "console-mihomo": [
+          "status"
+        ]
+      }
+    },
+    "write": {
+      "ubus": {
+        "console-mihomo": [
+          "save",
+          "action",
+          "select",
+          "mode",
+          "fetch_config",
+          "delay",
+          "site_test",
+          "vpn_proxy",
+          "delay_start",
+          "source_policy",
+          "clear"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,21 @@
+#!/bin/sh
+# SPDX-License-Identifier: Apache-2.0
+pid=
+cleanup() {
+	trap - EXIT INT TERM
+	rm -f /var/run/console-mihomo-transparent
+	[ -z "$pid" ] || { kill "$pid" 2>/dev/null; wait "$pid" 2>/dev/null; }
+	/usr/libexec/console-mihomo-network stop
+}
+trap cleanup EXIT INT TERM
+/usr/bin/mihomo -d /etc/console-mihomo -f /etc/console-mihomo/config.json &
+pid=$!
+ready=0
+for attempt in 1 2 3 4 5 6 7 8; do
+	kill -0 "$pid" 2>/dev/null || exit 1
+	if ip link show cmihomo >/dev/null 2>&1; then ready=1; break; fi
+	sleep 1
+done
+[ "$ready" = 1 ] || exit 1
+/usr/libexec/console-mihomo-network start || exit 1
+wait "$pid"

@@ -1,0 +1,57 @@
+// SPDX-License-Identifier: Apache-2.0
+import { readfile } from 'fs';
+
+// 解析 /proc/net/nf_conntrack，同时返回原方向与回程方向的字节/包计数。
+// luci.getConntrackList 只暴露原方向 bytes：LAN → WAN 的上传计入、WAN → LAN
+// 的下载（回程元组）被丢掉，协议流量分布因此严重偏小、比例失真。
+function connections() {
+	const text = readfile('/proc/net/nf_conntrack');
+	if (text == null) return null;
+	const rows = [];
+	for (let line in split(text, '\n')) {
+		const t = split(trim(line), /\s+/);
+		if (length(t) < 8 || (t[0] != 'ipv4' && t[0] != 'ipv6')) continue;
+		let orig = null, reply = null, cur = null, zone = '0';
+		for (let i = 5; i < length(t); i++) {
+			const eq = index(t[i], '=');
+			if (eq < 1) continue;
+			const key = substr(t[i], 0, eq), value = substr(t[i], eq + 1);
+			if (key == 'src') {
+				// 出现新的 src，说明开始回程元组（未开启记账时两条元组都没有计数）。
+				if (cur && cur.src != null) {
+					if (!orig) orig = cur; else if (!reply) reply = cur;
+					cur = null;
+				}
+				if (!cur) cur = { bytes: null, packets: null, sport: null, dport: null };
+				cur.src = value;
+			}
+			else if (!cur) continue;
+			else if (key == 'dst') cur.dst = value;
+			else if (key == 'sport') cur.sport = +value;
+			else if (key == 'dport') cur.dport = +value;
+			else if (key == 'bytes') cur.bytes = +value;
+			else if (key == 'packets') cur.packets = +value;
+			else if (key == 'zone') zone = value;
+		}
+		if (cur) { if (!orig) orig = cur; else if (!reply) reply = cur; }
+		if (!orig || !orig.src || !orig.dst) continue;
+		push(rows, {
+			layer3: t[0], layer4: t[2], src: orig.src, dst: orig.dst,
+			sport: orig.sport != null ? orig.sport : 0,
+			dport: orig.dport != null ? orig.dport : 0,
+			bytes: orig.bytes != null ? orig.bytes : 0,
+			packets: orig.packets != null ? orig.packets : 0,
+			replyBytes: reply && reply.bytes != null ? reply.bytes : 0,
+			replyPackets: reply && reply.packets != null ? reply.packets : 0,
+			zone
+		});
+	}
+	return rows;
+}
+
+return { 'console-conntrack': {
+	list: { call: () => {
+		const rows = connections();
+		return rows == null ? { error: '无法读取 /proc/net/nf_conntrack' } : { connections: rows };
+	} }
+} };

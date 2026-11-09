@@ -1,0 +1,53 @@
+/* SPDX-License-Identifier: Apache-2.0 */
+:root { color-scheme: light; --primary-color-high: #2475ae; --primary-color-medium: #1c6b9f; --primary-color-low: #165b89; }
+body { font-family: "Microsoft YaHei", "PingFang SC", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f3f6f9; color: #405365; font-size: 14px; }
+body:has(.console-header) { margin: 0; padding: 0; }
+.console-header { position: sticky; top: 0; z-index: 800; height: 52px; margin: 0; padding: 0 20px; background: #2475ae; box-shadow: none; display: flex; align-items: center; gap: 18px; }
+.console-header .console-brand { color: #fff; font-size: 25px; font-weight: 600; line-height: 1; text-decoration: none; text-shadow: none; white-space: nowrap; }
+.console-brand small { font-size: 12px; font-weight: 400; margin-left: 12px; }
+.console-header .console-indicators { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+.console-header .console-logout { color: #fff; text-decoration: none; font-size: 13px; padding: 10px; text-shadow: none; }
+.console-toggle { display: none; border: 0; padding: 6px 8px; color: #fff; background: transparent; font-size: 22px; cursor: pointer; }
+.console-sidebar { position: fixed; top: 52px; bottom: 0; left: 0; width: 190px; background: #223241; overflow-y: auto; z-index: 790; padding: 10px 0 24px; box-sizing: border-box; }
+.console-nav-heading { display: flex; align-items: center; gap: 13px; box-sizing: border-box; min-height: 48px; padding: 11px 17px; color: #eff5f9; font-size: 14px; text-decoration: none; cursor: pointer; list-style: none; }
+.console-nav-heading::-webkit-details-marker { display: none; }
+.console-nav-heading:hover, .console-nav-heading.active, .console-nav-group[open] > .console-nav-heading { background: #344657; color: #fff; text-decoration: none; }
+.console-nav-icon { width: 21px; height: 21px; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.console-chevron { margin-left: auto; font-size: 22px; transition: transform .15s; }
+.console-nav-group[open] .console-chevron { transform: rotate(90deg); }
+.console-nav-list { padding: 4px 0; background: #1b2b38; }
+.console-nav-link { display: block; min-height: 38px; box-sizing: border-box; padding: 10px 14px 10px 51px; color: #d2dce4; font-size: 13px; line-height: 18px; text-decoration: none; overflow-wrap: anywhere; }
+.console-nav-link:hover, .console-nav-link.active { background: #304a5d; color: #fff; text-decoration: none; }
+.console-nav-link.active { box-shadow: inset 3px 0 #49bce3; }
+.console-menu-error { padding: 12px; color: #fff; }
+.console-header ~ #maincontent { box-sizing: border-box; width: auto; max-width: none; min-height: calc(100vh - 120px); margin: 0 0 0 190px; padding: 24px 28px; }
+
+/* 会被 console.interfaces / console.dhcp 重排的页面：在增强完成前先遮住原生内容，
+   避免"先闪一下原生界面、几秒后才变成新版"。data-page 由服务端渲染，页面一到达即生效。
+   增强模块渲染完成后给 body 加 cn-enhanced，遮罩随即撤除。 */
+body[data-page="admin-network-network"]:not(.cn-enhanced) #view,
+body[data-page="admin-network-dhcp"]:not(.cn-enhanced) #view { visibility: hidden; }
+body[data-page="admin-network-network"]:not(.cn-enhanced) #view::before,
+body[data-page="admin-network-dhcp"]:not(.cn-enhanced) #view::before {
+	content: '正在加载…';
+	position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+	color: #8795a2; font-size: 14px; visibility: visible;
+}
+.console-header ~ #maincontent h2, .console-header ~ #maincontent h3 { color: #334e63; }
+.console-header ~ #maincontent .cbi-map > h2, .console-header ~ #maincontent #view > h2 { font-size: 20px; margin: 0 0 20px; }
+.console-header ~ #maincontent .cbi-section { background: #fff; border: 1px solid #e0e7ed; padding: 20px; margin-bottom: 16px; border-radius: 3px; }
+.console-header ~ #maincontent .cbi-section .cbi-section { padding: 12px; background: #f9fbfc; }
+.console-header ~ footer { margin: 0 28px 0 218px; padding: 16px 0; font-size: 12px; }
+#tabmenu .tabs, .cbi-tabmenu { overflow-x: auto; overflow-y: hidden; }
+.console-header ~ #maincontent a:focus-visible, .console-sidebar a:focus-visible, .console-sidebar summary:focus-visible, .console-toggle:focus-visible { outline: 2px solid #49bce3; outline-offset: -2px; }
+@media (max-width: 760px) {
+	.console-header { padding: 0 12px; gap: 8px; }
+	.console-toggle { display: block; }
+	.console-brand small { display: none; }
+	.console-sidebar { display: none; width: 230px; box-shadow: 4px 0 18px #172b3c55; }
+	.console-menu-open .console-sidebar { display: block; }
+	.console-header ~ #maincontent { margin-left: 0; padding: 18px 12px; }
+	.console-header ~ footer { margin: 0 12px; }
+	.console-header ~ #maincontent .cbi-section { padding: 12px; }
+}
+@media (prefers-reduced-motion: reduce) { .console-chevron { transition: none; } }

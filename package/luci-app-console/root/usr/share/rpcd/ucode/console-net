@@ -1,0 +1,75 @@
+// SPDX-License-Identifier: Apache-2.0
+import { currentState, applyInterface, confirmApply, pendingInfo, validateInterface, interfaceRole, createInterface, deleteInterface, applyBridge, validatePorts } from 'console.net-state';
+
+return { 'console-net': {
+	state: { call: () => {
+		try { return { state: currentState() }; }
+		catch (e) { return { error: e.message || '读取网络配置失败' }; }
+	} },
+	// 只校验不写入：编辑弹框里实时反馈错误
+	check: { args: { name: '', config: {} }, call: req => {
+		try { validateInterface(req.args.config, interfaceRole(req.args.name)); return { ok: true }; }
+		catch (e) { return { error: e.message || '校验失败' }; }
+	} },
+	apply: { args: { name: '', config: {} }, call: req => {
+		try {
+			const result = applyInterface(req.args.name, req.args.config);
+			return {
+				ok: true,
+				reloaded: result.reloaded,
+				deadline: result.deadline,
+				confirmSeconds: result.deadline ? int(result.deadline - time()) : 0,
+				state: result.state
+			};
+		}
+		catch (e) { return { error: e.message || '应用网络配置失败' }; }
+	} },
+	create: { args: { config: {} }, call: req => {
+		try {
+			const result = createInterface(req.args.config);
+			return { ok: true, state: result.state };
+		}
+		catch (e) { return { error: e.message || '创建接口失败' }; }
+	} },
+	remove: { args: { name: '' }, call: req => {
+		try {
+			const result = deleteInterface(req.args.name);
+			return { ok: true, state: result.state };
+		}
+		catch (e) { return { error: e.message || '删除接口失败' }; }
+	} },
+	// 确认本次变更（撤销自动回滚定时器）
+	confirm: { call: () => {
+		try { return confirmApply(); }
+		catch (e) { return { error: e.message || '确认失败' }; }
+	} },
+	// 立即回滚到上次备份
+	rollback: { call: () => {
+		try {
+			const ran = system('/bin/sh -c "cp /etc/console-backup/network.last-good /etc/config/network && /etc/init.d/network reload"') == 0;
+			if (!ran) return { error: '回滚失败，请通过 SSH 手工恢复 /etc/console-backup/network.last-good' };
+			return { ok: true, state: currentState() };
+		}
+		catch (e) { return { error: e.message || '回滚失败' }; }
+	} },
+	// 桥成员：只校验，不写盘（编辑弹框提交前实时反馈）
+	bridge_check: { args: { name: '', ports: [] }, call: req => {
+		try { validatePorts(req.args.ports, req.args.name); return { ok: true }; }
+		catch (e) { return { error: e.message || '校验失败' }; }
+	} },
+	// 桥成员：写入 config device 段的 ports 并 reload 网络
+	bridge_apply: { args: { name: '', ports: [] }, call: req => {
+		try {
+			const result = applyBridge(req.args.name, req.args.ports);
+			return {
+				ok: true,
+				changed: result.changed,
+				reloaded: result.reloaded,
+				deadline: result.deadline,
+				confirmSeconds: result.deadline ? int(result.deadline - time()) : 0,
+				state: result.state
+			};
+		}
+		catch (e) { return { error: e.message || '应用网桥配置失败' }; }
+	} }
+} };

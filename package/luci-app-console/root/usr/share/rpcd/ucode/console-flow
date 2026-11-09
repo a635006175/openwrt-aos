@@ -1,0 +1,21 @@
+// SPDX-License-Identifier: Apache-2.0
+// rpcd ucode 对象 console-flow。所有异常统一转成 { error: "中文" }，
+// 保证前端任何失败都能显示后端原因，而不是静默变成空对象。
+import { state, check, applyPolicy, confirmPolicy, rollbackPolicy, reset, resolvePolicy, refreshDomains } from 'console.flow-engine';
+
+function respond(callback) {
+	try { return callback(); }
+	catch (e) { return { error: (e && e.message) ? e.message : '流控分流操作失败' }; }
+}
+
+return { 'console-flow': {
+	state: { call: () => respond(state) },
+	check: { args: { config: {} }, call: request => respond(() => check(request.args.config)) },
+	resolve: { args: { config: {} }, call: request => respond(() => resolvePolicy(request.args.config)) },
+	apply: { args: { config: {} }, call: request => respond(() => applyPolicy(request.args.config)) },
+	confirm: { call: () => respond(confirmPolicy) },
+	rollback: { call: () => respond(() => rollbackPolicy(false)) },
+	reset: { call: () => respond(reset) },
+	// 主动触发一次域名重解析（UI 的“立即解析”按钮走 resolve；此方法给服务/调试用）。
+	refresh: { args: { force: true }, call: request => respond(() => refreshDomains(request.args.force !== false)) }
+} };

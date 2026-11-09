@@ -1,0 +1,7 @@
+#!/usr/bin/ucode
+// SPDX-License-Identifier: Apache-2.0
+import { prepare, firewall } from 'console.mihomo-network';
+if (ARGV[0] == 'prepare') prepare();
+else if (ARGV[0] == 'start') firewall(true);
+else if (ARGV[0] == 'stop') firewall(false);
+else die('Unknown network operation\n');

@@ -1,0 +1,165 @@
+{
+  "admin/network/firewall": {
+    "title": "",
+    "action": {
+      "type": "alias",
+      "path": "admin/security/zones"
+    }
+  },
+  "admin/security/zones": {
+    "title": "常规设置",
+    "order": 20,
+    "action": {
+      "type": "view",
+      "path": "firewall/zones"
+    },
+    "depends": {
+      "acl": [
+        "luci-app-firewall"
+      ],
+      "uci": {
+        "firewall": true
+      },
+      "fs": {
+        "/sbin/fw4": "executable"
+      }
+    }
+  },
+  "admin/network/firewall/zones": {
+    "title": "",
+    "action": {
+      "type": "alias",
+      "path": "admin/security/zones"
+    }
+  },
+  "admin/security/forwards": {
+    "title": "",
+    "order": 30,
+    "action": {
+      "type": "view",
+      "path": "firewall/forwards"
+    },
+    "depends": {
+      "acl": [
+        "luci-app-firewall"
+      ],
+      "uci": {
+        "firewall": true
+      },
+      "fs": {
+        "/sbin/fw4": "executable"
+      }
+    }
+  },
+  "admin/network/firewall/forwards": {
+    "title": "",
+    "action": {
+      "type": "alias",
+      "path": "admin/security/forwards"
+    }
+  },
+  "admin/security/rules": {
+    "title": "通信规则",
+    "order": 40,
+    "action": {
+      "type": "view",
+      "path": "firewall/rules"
+    },
+    "depends": {
+      "acl": [
+        "luci-app-firewall"
+      ],
+      "uci": {
+        "firewall": true
+      },
+      "fs": {
+        "/sbin/fw4": "executable"
+      }
+    }
+  },
+  "admin/network/firewall/rules": {
+    "title": "",
+    "action": {
+      "type": "alias",
+      "path": "admin/security/rules"
+    }
+  },
+  "admin/security/snats": {
+    "title": "",
+    "order": 50,
+    "action": {
+      "type": "view",
+      "path": "firewall/snats"
+    },
+    "depends": {
+      "acl": [
+        "luci-app-firewall"
+      ],
+      "uci": {
+        "firewall": true
+      },
+      "fs": {
+        "/sbin/fw4": "executable"
+      }
+    }
+  },
+  "admin/network/firewall/snats": {
+    "title": "",
+    "action": {
+      "type": "alias",
+      "path": "admin/security/snats"
+    }
+  },
+  "admin/security/ipsets": {
+    "title": "IP集合",
+    "order": 55,
+    "action": {
+      "type": "view",
+      "path": "firewall/ipsets"
+    },
+    "depends": {
+      "acl": [
+        "luci-app-firewall"
+      ],
+      "uci": {
+        "firewall": true
+      },
+      "fs": {
+        "/sbin/fw4": "executable"
+      }
+    }
+  },
+  "admin/network/firewall/ipsets": {
+    "title": "",
+    "action": {
+      "type": "alias",
+      "path": "admin/security/ipsets"
+    }
+  },
+  "admin/security/custom": {
+    "title": "自定义规则",
+    "order": 60,
+    "action": {
+      "type": "view",
+      "path": "firewall/custom"
+    },
+    "depends": {
+      "fs": {
+        "/usr/share/fw3/helpers.conf": "file"
+      },
+      "acl": [
+        "luci-app-firewall"
+      ],
+      "uci": {
+        "firewall": true
+      }
+    }
+  },
+  "admin/network/firewall/custom": {
+    "title": "",
+    "action": {
+      "type": "alias",
+      "path": "admin/security/custom"
+    }
+  }
+}

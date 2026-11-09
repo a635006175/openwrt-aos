@@ -1,0 +1,61 @@
+/* SPDX-License-Identifier: Apache-2.0 */
+/* DHCP 页面：参考爱快管理界面的信息密度与分组方式重排。 */
+
+/* 重排后隐藏被替代的原生标题与租约表格，表单本身保持可见可用。 */
+.cn-dhcp-native #cbi-dhcp-__leases__ > h3,
+.cn-dhcp-native #cbi-dhcp-__leases__ > .cbi-section-node > h3 { display: none; }
+/* 原生租约表格已由上方卡片替代，隐藏表格及其残留标题。 */
+.cn-dhcp-native #lease_status_table,
+.cn-dhcp-native #lease6_status_table,
+.cn-dhcp-native #lease_status_table + *,
+.cn-dhcp-native #lease6_status_table + * { display: none; }
+.cn-dhcp-native #cbi-dhcp-__leases__ h4 { display: none; }
+
+/* 概览指标：大数字 + 说明，横向排列，窄屏自动折行。 */
+.console-header ~ #maincontent .cn-dhcp .cn-dhcp-summary { padding: 20px 24px; margin-bottom: 16px; }
+.cn-dhcp .cn-dhcp-metrics { display: flex; flex-wrap: wrap; gap: 12px 0; margin-bottom: 14px; }
+.cn-dhcp .cn-dhcp-metric { flex: 1 1 0; min-width: 132px; padding: 0 20px; border-left: 1px solid #e5ebef; }
+.cn-dhcp .cn-dhcp-metric:first-child { padding-left: 0; border-left: 0; }
+.cn-dhcp .cn-dhcp-value { display: block; font-size: 24px; font-weight: 500; line-height: 1.35; color: #334e63; }
+.cn-dhcp .cn-dhcp-value.accent { color: #2475ae; }
+.cn-dhcp .cn-dhcp-value.muted { color: #9aa9b5; }
+.cn-dhcp .cn-dhcp-label { display: block; margin-top: 4px; font-size: 12px; color: #64798a; }
+.cn-dhcp .cn-dhcp-summary .cn-help { margin: 0; padding-top: 14px; border-top: 1px solid #f0f3f6; color: #64798a; font-size: 12px; line-height: 1.7; }
+
+.console-header ~ #maincontent .cn-dhcp .cn-dhcp-panel { padding: 20px 24px; margin-bottom: 16px; }
+.cn-dhcp .cn-dhcp-panel h3 { margin: 0 0 16px; padding: 0; border: 0; font-size: 15px; color: #334e63; }
+
+/* 租约卡片：地址突出、剩余时间右对齐，字段两列对齐便于扫读。 */
+.cn-dhcp .cn-dhcp-leases { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 12px; }
+.cn-dhcp .cn-dhcp-lease { border: 1px solid #e5ebef; border-radius: 4px; padding: 14px 16px; background: #fbfcfd; }
+/* 地址与剩余时间分两行，长 IPv6 地址不会把剩余时间挤到换行。 */
+.cn-dhcp .cn-dhcp-lease-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding-bottom: 10px; margin-bottom: 10px; border-bottom: 1px solid #eef2f5; }
+.cn-dhcp .cn-dhcp-lease-ip { font-size: 13px; font-weight: 600; color: #2475ae; overflow-wrap: anywhere; word-break: break-all; }
+.cn-dhcp .cn-dhcp-lease-remain { flex: 0 0 auto; font-size: 12px; color: #64798a; white-space: nowrap; }
+.cn-dhcp .cn-dhcp-lease-remain.urgent { color: #ba3341; }
+.cn-dhcp .cn-dhcp-lease-fields { display: grid; grid-template-columns: 84px minmax(0, 1fr); gap: 6px 12px; margin: 0; font-size: 12px; }
+.cn-dhcp .cn-dhcp-lease-fields dt { margin: 0; color: #64798a; font-weight: 400; }
+.cn-dhcp .cn-dhcp-lease-fields dd { margin: 0; color: #405365; overflow-wrap: anywhere; font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; }
+.cn-dhcp .cn-dhcp-empty { margin: 0; padding: 18px; text-align: center; color: #8795a2; font-size: 13px; background: #f7f9fb; border: 1px dashed #dfe7ed; border-radius: 4px; }
+
+/* 底部操作条：去掉页面底部的大片空白，按钮靠右并固定在视口底部。 */
+.console-header ~ #maincontent { min-height: 0; padding-bottom: 0; }
+.console-header ~ #maincontent .cbi-page-actions { position: sticky; bottom: 0; z-index: 40; display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin: 0 -28px; padding: 14px 28px; background: #fff; border-top: 1px solid #dce4ea; box-shadow: 0 -2px 10px #172b3c14; }
+.console-header ~ #maincontent .cbi-page-actions .cbi-button { margin: 0; }
+.console-header ~ #maincontent .cbi-page-actions .cbi-dropdown.btn { min-width: 120px; height: 34px; }
+.console-header ~ #maincontent .cbi-page-actions .cbi-dropdown.btn .open { line-height: 32px; }
+
+/* 表单说明文字：加大行距并限制宽度，避免长段落糊成一片。 */
+.console-header ~ #maincontent .cbi-value-description { max-width: 74ch; }
+
+@media (max-width: 1100px) {
+	.cn-dhcp .cn-dhcp-leases { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 760px) {
+	.console-header ~ #maincontent .cn-dhcp .cn-dhcp-summary { padding: 16px; }
+	.cn-dhcp .cn-dhcp-metric { flex: 1 1 46%; min-width: 0; padding: 8px 12px; }
+	.cn-dhcp .cn-dhcp-metric:nth-child(odd) { padding-left: 0; border-left: 0; }
+	.cn-dhcp .cn-dhcp-value { font-size: 20px; }
+	.console-header ~ #maincontent .cbi-page-actions { margin: 0 -12px; padding: 12px; flex-wrap: wrap; }
+	.console-header ~ #maincontent .cbi-page-actions .cbi-button { flex: 1 1 auto; }
+}

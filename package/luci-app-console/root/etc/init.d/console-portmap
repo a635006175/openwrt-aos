@@ -1,0 +1,6 @@
+#!/bin/sh /etc/rc.common
+# SPDX-License-Identifier: Apache-2.0
+START=18
+start() {
+ /usr/bin/ucode -e 'import { recover } from "console.portmap"; recover();'
+}

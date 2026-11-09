@@ -1,0 +1,7 @@
+{
+  "luci-app-console-ddns": {
+    "description": "Manage console dynamic DNS services",
+    "read": { "ubus": { "console-ddns": [ "state", "log" ] } },
+    "write": { "ubus": { "console-ddns": [ "apply", "probe" ] } }
+  }
+}

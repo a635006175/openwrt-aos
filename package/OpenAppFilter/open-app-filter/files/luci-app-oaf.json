@@ -1,0 +1,20 @@
+{
+  "oaf": {
+    "description": "Grant access to OAF configuration",
+    "read": {
+      "uci": [
+        "fwx"
+      ]
+    },
+    "write": {
+      "ubus": {
+        "fwx": [
+          "common"
+        ]
+      },
+      "uci": [
+        "fwx"
+      ]
+    }
+  }
+}

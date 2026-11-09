@@ -1,0 +1,11 @@
+// SPDX-License-Identifier: Apache-2.0
+import { overview, setAutoBlock, unban, manualBan, forceRefresh, threatConfig } from 'console.situational';
+function respond(fn) { try { return fn(); } catch(e) { return {error:e.message || '态势感知操作失败'}; } }
+return { 'console-situational': {
+	overview: { call: () => respond(overview) },
+	config: { call: () => respond(() => ({ok:true, config: threatConfig()})) },
+	set: { args: { options:{} }, call:req=>respond(()=>setAutoBlock(req.args.options)) },
+	unban: { args: { ip:'' }, call:req=>respond(()=>unban(req.args.ip)) },
+	ban: { args: { ip:'', hours:24 }, call:req=>respond(()=>manualBan(req.args.ip, +(req.args.hours ?? 24))) },
+	refresh: { call: () => respond(forceRefresh) }
+} };

@@ -1,0 +1,20 @@
+#!/bin/sh /etc/rc.common
+# SPDX-License-Identifier: Apache-2.0
+USE_PROCD=1
+START=96
+STOP=09
+start_service() {
+	[ -f /etc/console-mihomo/enabled ] || return 0
+	[ -s /etc/console-mihomo/config.json ] || return 1
+	/usr/libexec/console-mihomo-network prepare || return 1
+	procd_open_instance
+	procd_set_param command /usr/libexec/console-mihomo-run
+	procd_set_param respawn 3600 5 5
+	procd_set_param stdout 1
+	procd_set_param stderr 1
+	procd_close_instance
+}
+
+service_triggers() {
+	procd_add_reload_trigger network firewall
+}

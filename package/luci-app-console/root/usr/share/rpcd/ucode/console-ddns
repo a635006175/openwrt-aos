@@ -1,0 +1,8 @@
+// SPDX-License-Identifier: Apache-2.0
+import { state, apply, log, probe } from 'console.ddns';
+return { 'console-ddns': {
+	state: { call: () => { try { return state(); } catch (e) { return { error: e.message }; } } },
+	log: { args: { section: '' }, call: req => { try { return log(req.args.section); } catch (e) { return { error: e.message }; } } },
+	apply: { args: { config: {} }, call: req => { try { return apply(req.args.config); } catch (e) { return { error: e.message }; } } },
+	probe: { call: () => { try { return probe(); } catch (e) { return { error: e.message }; } } }
+} };

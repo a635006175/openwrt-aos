@@ -1,0 +1,30 @@
+/* SPDX-License-Identifier: Apache-2.0 */
+.sa-root .cs-heading h2 { margin:0 0 6px; }
+.sa-map-box { background:linear-gradient(180deg,#0e2233 0%,#123048 60%,#0e2233 100%); border:1px solid #dfe7ed; border-radius:5px; padding:10px; }
+.sa-map-box svg { display:block; width:100%; height:auto; }
+.sa-timeline { background:#fff; border:1px solid #dfe7ed; border-radius:5px; padding:12px; }
+.sa-timeline svg { display:block; width:100%; height:auto; }
+.sa-switches { display:flex; align-items:center; gap:22px; flex-wrap:wrap; margin-bottom:10px; }
+.sa-switch { display:inline-flex; align-items:center; gap:8px; cursor:pointer; font-size:14px; }
+.sa-switch input[type=checkbox] { width:18px; height:18px; accent-color:#2475ae; cursor:pointer; }
+.sa-toolbar label { display:inline-flex; align-items:center; gap:6px; margin-right:14px; }
+.sa-toolbar input[type=number] { width:110px; }
+/* 两方向攻击来源同行两列 */
+.sa-dir-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; align-items:start; }
+.sa-dir-col { min-width:0; border:1px solid #e4ebf1; border-radius:5px; padding:10px 12px; background:#fbfcfd; }
+.sa-dir-col h4 { margin:0 0 2px; font-size:14px; }
+.sa-dir-head { display:flex; align-items:baseline; justify-content:space-between; gap:8px; margin-bottom:4px; }
+.sa-dir-count { white-space:nowrap; font-size:13px; color:#b23c3c; }
+.sa-dir-col .cs-scroll { max-height:260px; overflow-y:auto; overflow-x:hidden; margin-top:6px; }
+.sa-dir-col .cs-scroll table { min-width:0; width:100%; table-layout:fixed; }
+.sa-dir-col .cs-scroll td, .sa-dir-col .cs-scroll th { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:none; padding:5px 3px; font-size:12.5px; }
+.sa-dir-col .cs-scroll th:nth-child(1), .sa-dir-col .cs-scroll td:nth-child(1) { width:27%; padding-left:2px; }
+.sa-dir-col .cs-scroll th:nth-child(2), .sa-dir-col .cs-scroll td:nth-child(2) { width:14%; }
+.sa-dir-col .cs-scroll th:nth-child(3), .sa-dir-col .cs-scroll td:nth-child(3) { width:24%; }
+.sa-dir-col .cs-scroll th:nth-child(4), .sa-dir-col .cs-scroll td:nth-child(4) { width:9%; text-align:center; }
+.sa-dir-col .cs-scroll th:nth-child(5), .sa-dir-col .cs-scroll td:nth-child(5) { width:14%; padding-right:2px; }
+.sa-dir-col .cs-scroll th:nth-child(6), .sa-dir-col .cs-scroll td:nth-child(6) { width:12%; padding-right:2px; }
+.sa-dir-col .table { font-size:13px; }
+.sa-dir-col .cs-note { margin:2px 0 8px; }
+@media(max-width:1100px) { .sa-dir-grid { grid-template-columns:1fr; } }
+@media(max-width:850px) { .sa-switches { gap:12px; } }

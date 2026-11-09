@@ -1,0 +1,21 @@
+// SPDX-License-Identifier: Apache-2.0
+import { listAccounts, saveAccount, deleteAccount } from 'console.vpn-accounts';
+import { currentServer, validateServer, syncServerAccounts } from 'console.vpn-service';
+return { 'console-vpn-accounts': {
+	list: { call: () => ({ accounts: listAccounts() }) },
+	save: { args: { username: '', password: '', address: '', remoteSubnet: '', description: '', enabled: true }, call: req => {
+		try {
+			const next = { username: req.args.username, enabled: req.args.enabled == true, address: req.args.address || '', remoteSubnet: req.args.remoteSubnet || '' };
+			const accounts = filter(listAccounts(), account => account.username != next.username); push(accounts, next);
+			validateServer(currentServer(), accounts);
+			const account = saveAccount(req.args); syncServerAccounts(); return { account };
+		} catch (e) { return { error: e.message || '保存失败' }; }
+	} },
+	remove: { args: { username: '' }, call: req => {
+		try {
+			const accounts = filter(listAccounts(), account => account.username != req.args.username);
+			validateServer(currentServer(), accounts);
+			deleteAccount(req.args.username); syncServerAccounts(); return { ok: true };
+		} catch (e) { return { error: e.message || '删除失败' }; }
+	} }
+} };

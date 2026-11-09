@@ -1,0 +1,11 @@
+#!/usr/bin/ucode
+// SPDX-License-Identifier: Apache-2.0
+import { listAccounts } from 'console.vpn-accounts';
+import { admission } from 'console.vpn-sessions';
+import { readfile } from 'fs';
+try {
+	const name=getenv('common_name'),accounts=filter(listAccounts(),a=>a.username==name),account=accounts[0]||{username:name,enabled:false};
+	const pid=getenv('daemon_pid')||trim(readfile('/var/run/console-vpn/server.pid')||'');
+	const ok=admission('/var/run/console-vpn/admission',pid,account,getenv('trusted_ip'),getenv('trusted_port'),getenv('script_type')=='client-disconnect');
+	if(!ok)warn('OpenVPN concurrent session rejected for '+name+'\n');exit(ok?0:1);
+}catch(e){warn('OpenVPN session admission failed\n');exit(1);}

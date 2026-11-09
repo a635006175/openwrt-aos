@@ -1,0 +1,32 @@
+/* SPDX-License-Identifier: Apache-2.0 */
+/* 爱快风格 DHCP 服务器设置页 */
+
+.cn-dhcp-page > h2 { margin-bottom: 8px; }
+.cn-dhcp-page > p { color: #64798a; font-size: 13px; line-height: 1.7; margin: 0 0 16px; }
+
+/* 状态条：一眼区分"配置启用"与"实际在分配地址" */
+.cn-dhcp-status { display: flex; align-items: flex-start; gap: 12px; padding: 12px 16px; margin-bottom: 16px; background: #f7f9fb; border: 1px solid #e0e7ed; border-radius: 4px; }
+.cn-dhcp-status .badge { flex: 0 0 auto; margin-top: 1px; }
+.cn-dhcp-status-text { color: #526777; font-size: 13px; line-height: 1.7; }
+
+/* 预览条：直接显示可用地址数，避免用户自己心算 */
+.cn-dhcp-preview { margin: 4px 0 0 156px; padding: 10px 14px; background: #f2f8fd; border: 1px solid #cfe4f5; border-radius: 4px; color: #526777; font-size: 13px; }
+.cn-dhcp-preview strong { color: #2475ae; font-size: 16px; margin: 0 2px; }
+.cn-dhcp-preview-muted { color: #8795a2; }
+.cn-dhcp-preview-bad { color: #ba3341; }
+
+/* 静态绑定表格：输入框撑满单元格，行高紧凑 */
+.cn-dhcp-page .cbi-section-table .cn-dhcp-host-input { width: 100%; box-sizing: border-box; min-height: 32px; font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; font-size: 13px; }
+.cn-dhcp-page .cbi-section-table td { padding: 6px 8px; vertical-align: middle; }
+.cn-dhcp-page .cbi-section-table th { white-space: nowrap; }
+
+.cn-dhcp-warn { color: #a3404d; background: #fff5f6; border-left: 3px solid #ba3341; padding: 10px 12px; font-size: 13px; line-height: 1.7; }
+
+/* 底部操作条与其它重排页面保持一致 */
+.console-header ~ #maincontent .cn-dhcp-actions { display: flex; justify-content: flex-end; gap: 10px; margin: 0 -20px -20px; padding: 14px 20px; background: #f7f9fb; border-top: 1px solid #e0e7ed; border-radius: 0 0 3px 3px; }
+
+@media (max-width: 760px) {
+	.cn-dhcp-preview { margin-left: 0; }
+	.console-header ~ #maincontent .cn-dhcp-actions { margin: 0 -12px -12px; padding: 12px; flex-wrap: wrap; }
+	.console-header ~ #maincontent .cn-dhcp-actions .cbi-button { flex: 1 1 auto; }
+}

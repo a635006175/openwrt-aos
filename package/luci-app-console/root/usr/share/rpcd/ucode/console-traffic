@@ -1,0 +1,47 @@
+// SPDX-License-Identifier: Apache-2.0
+import { open } from 'fs';
+
+function history(seconds) {
+	seconds = int(seconds);
+	if (seconds < 60) seconds = 300;
+	if (seconds > 1296000) seconds = 1296000;
+	const now = time(), start = now - seconds;
+	const step = int((seconds + 599) / 600) < 5 ? 5 : int((seconds + 599) / 600);
+	let bins = {}, last = null;
+	for (let hour = int(start / 3600); hour <= int(now / 3600); hour++) {
+		const fd = open(`/srv/console-history/${hour}.jsonl`, 'r');
+		if (!fd) continue;
+		for (let line = fd.read('line'); line != null; line = fd.read('line')) {
+			let row;
+			try { row = json(line); } catch (e) { continue; }
+			if (type(row?.time) != 'int' || row.time < start || row.time > now || type(row.rates) != 'object') continue;
+			if (last == null || row.time > last) last = row.time;
+			const key = int(row.time / step);
+			bins[key] ??= { rates: {} };
+			for (let dev, rate in row.rates) {
+				if (type(rate) != 'array' || row.duration <= 0) continue;
+				bins[key].rates[dev] ??= [0, 0, 0];
+				bins[key].rates[dev][0] += rate[0] * row.duration;
+				bins[key].rates[dev][1] += rate[1] * row.duration;
+				bins[key].rates[dev][2] += row.duration;
+			}
+		}
+		fd.close();
+	}
+	let samples = [];
+	for (let key = int(start / step); key <= int(now / step); key++) {
+		const bin = bins[key];
+		let rates = {}, upload = null, download = null;
+		if (bin && length(keys(bin.rates))) {
+			upload = 0; download = 0;
+			for (let dev, sum in bin.rates) {
+				rates[dev] = { upload: sum[0] / sum[2], download: sum[1] / sum[2] };
+				upload += rates[dev].upload; download += rates[dev].download;
+			}
+		}
+		push(samples, { time: key * step, upload, download, rates });
+	}
+	return { samples, seconds, interval: step, last_sample: last, retention: 1296000, persistent: true };
+}
+
+return { 'console-traffic': { history: { args: { seconds: 300 }, call: req => history(req.args.seconds) } } };

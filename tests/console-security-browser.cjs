@@ -1,0 +1,13 @@
+// SPDX-License-Identifier: Apache-2.0
+// Read-only live UI checks: navigate, edit local drafts and preview; never apply policies.
+const {chromium}=require('playwright');const assert=require('node:assert/strict');const fs=require('node:fs');
+(async()=>{const browser=await chromium.launch({headless:true,executablePath:'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'});const page=await browser.newPage({viewport:{width:1440,height:1000}}),errors=[],results=[];page.on('pageerror',e=>errors.push(e.message));
+try{
+	await page.goto('http://192.168.1.1/cgi-bin/luci/');await page.locator('[name=luci_username]').fill('root');await page.getByRole('button',{name:'登录',exact:true}).click();await page.locator('#ow-console').waitFor();
+	for(const name of ['overview','regions','devices','analysis','logs']){const start=Date.now();const response=await page.goto('http://192.168.1.1/cgi-bin/luci/admin/security/'+name);assert.equal(response.status(),200);await page.locator('.cs-security').waitFor();assert.ok(await page.getByText('防火墙',{exact:true}).count());results.push({page:name,ms:Date.now()-start});if(name==='overview'){await page.evaluate(()=>window.scrollTo(0,0));await page.screenshot({path:'tmp/console-qa/security-overview.png',fullPage:true});}}
+	await page.goto('http://192.168.1.1/cgi-bin/luci/admin/security/regions');await page.locator('.cs-security').waitFor();await page.getByRole('button',{name:'新增规则',exact:true}).click();await page.locator('.modal input[type=text]').first().fill('浏览器草稿测试');await page.locator('.modal select[multiple]').selectOption(['US']);await page.getByRole('button',{name:'保存到草稿',exact:true}).click();assert.ok(await page.getByText('有未应用的修改',{exact:true}).isVisible());await page.getByRole('button',{name:'放弃草稿',exact:true}).click();
+	await page.getByLabel('远端 IP',{exact:true}).fill('8.8.8.8');await page.getByRole('button',{name:'预览草稿规则',exact:true}).click();await page.getByText(/美国.*地区层通过/).waitFor();
+	await page.setViewportSize({width:375,height:900});await page.evaluate(()=>window.scrollTo(0,0));await page.screenshot({path:'tmp/console-qa/security-mobile.png',fullPage:true});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'mobile overflow');
+	await page.goto('http://192.168.1.1/cgi-bin/luci/admin/security/devices');await page.locator('.cs-security').waitFor();await page.waitForTimeout(4500);assert.equal(await page.getByText(/采集数据已过期/).count(),0);assert.deepEqual(errors,[]);
+	fs.writeFileSync('tmp/console-qa/security-pages.json',JSON.stringify({results,errors},null,2));console.log(JSON.stringify({results,errors}));
+}finally{await browser.close();}})().catch(e=>{console.error(e);process.exitCode=1;});

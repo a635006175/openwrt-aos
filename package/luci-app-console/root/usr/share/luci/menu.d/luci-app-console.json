@@ -1,0 +1,242 @@
+{
+  "admin/console": {
+    "title": "系统概况",
+    "order": 1,
+    "action": {
+      "type": "view",
+      "path": "console/overview"
+    },
+    "depends": {
+      "acl": [
+        "luci-app-console"
+      ]
+    }
+  },
+  "admin/network/console-net": {
+    "title": "内外网设置",
+    "order": 15,
+    "action": {
+      "type": "view",
+      "path": "console/net-server"
+    },
+    "depends": {
+      "acl": [
+        "luci-app-console-net"
+      ]
+    }
+  },
+  "admin/network/console-dhcp": {
+    "title": "DHCP 服务器",
+    "order": 20,
+    "action": {
+      "type": "view",
+      "path": "console/dhcp-server"
+    },
+    "depends": {
+      "acl": [
+        "luci-app-console-dhcp"
+      ]
+    }
+  },
+  "admin/vpn/console-status": {
+    "title": "OpenVPN 状态",
+    "order": 28,
+    "action": {
+      "type": "view",
+      "path": "console/vpn-status"
+    },
+    "depends": {
+      "acl": [
+        "luci-app-console-vpn"
+      ],
+      "fs": {
+        "/usr/sbin/openvpn": "executable"
+      }
+    }
+  },
+  "admin/vpn/console-accounts": {
+    "title": "OpenVPN 账号",
+    "order": 31,
+    "action": {
+      "type": "view",
+      "path": "console/vpn-accounts"
+    },
+    "depends": {
+      "acl": [
+        "luci-app-console-vpn"
+      ],
+      "fs": {
+        "/usr/sbin/openvpn": "executable"
+      }
+    }
+  },
+  "admin/vpn/console-server": {
+    "title": "OpenVPN 服务端",
+    "order": 29,
+    "action": {
+      "type": "view",
+      "path": "console/vpn-server"
+    },
+    "depends": {
+      "acl": [
+        "luci-app-console-vpn"
+      ],
+      "fs": {
+        "/usr/sbin/openvpn": "executable"
+      }
+    }
+  },
+  "admin/vpn/console-client": {
+    "title": "OpenVPN 客户端",
+    "order": 30,
+    "action": {
+      "type": "view",
+      "path": "console/vpn-client"
+    },
+    "depends": {
+      "acl": [
+        "luci-app-console-vpn"
+      ],
+      "fs": {
+        "/usr/sbin/openvpn": "executable"
+      }
+    }
+  },
+  "admin/security": {
+    "title": "防火墙",
+    "order": 35,
+    "action": {
+      "type": "firstchild"
+    }
+  },
+  "admin/situational": {
+    "title": "态势感知",
+    "order": 36,
+    "action": {
+      "type": "view",
+      "path": "console/situational"
+    },
+    "depends": {
+      "acl": [
+        "luci-app-console-situational"
+      ]
+    }
+  },
+  "admin/security/overview": {
+    "title": "安全总览",
+    "order": 1,
+    "action": {
+      "type": "view",
+      "path": "console/security"
+    },
+    "depends": {
+      "acl": [
+        "luci-app-console-security"
+      ]
+    }
+  },
+  "admin/security/regions": {
+    "title": "地区访问控制",
+    "order": 2,
+    "action": {
+      "type": "view",
+      "path": "console/security"
+    },
+    "depends": {
+      "acl": [
+        "luci-app-console-security"
+      ]
+    }
+  },
+  "admin/security/blocked": {
+    "title": "阻止详情",
+    "order": 3,
+    "action": {
+      "type": "view",
+      "path": "console/security"
+    },
+    "depends": {
+      "acl": [
+        "luci-app-console-security"
+      ]
+    }
+  },
+  "admin/security/devices": {
+    "title": "设备流量",
+    "order": 4,
+    "action": {
+      "type": "view",
+      "path": "console/security"
+    },
+    "depends": {
+      "acl": [
+        "luci-app-console-security"
+      ]
+    }
+  },
+  "admin/security/analysis": {
+    "title": "流量分析",
+    "order": 5,
+    "action": {
+      "type": "view",
+      "path": "console/security"
+    },
+    "depends": {
+      "acl": [
+        "luci-app-console-security"
+      ]
+    }
+  },
+  "admin/security/logs": {
+    "title": "拦截事件与数据库",
+    "order": 6,
+    "action": {
+      "type": "view",
+      "path": "console/security"
+    },
+    "depends": {
+      "acl": [
+        "luci-app-console-security"
+      ]
+    }
+  },
+  "admin/network/console-portmap": {
+    "title": "端口映射",
+    "order": 25,
+    "action": {
+      "type": "view",
+      "path": "console/portmap"
+    },
+    "depends": {
+      "acl": [
+        "luci-app-console-portmap"
+      ]
+    }
+  },
+  "admin/network/console-ddns": {
+    "title": "动态 DNS",
+    "order": 26,
+    "action": {
+      "type": "view",
+      "path": "console/ddns"
+    },
+    "depends": {
+      "acl": [
+        "luci-app-console-ddns"
+      ]
+    }
+  },
+  "admin/vpn/console-mihomo": {
+    "title": "Clash / Mihomo",
+    "order": 32,
+    "action": {
+      "type": "view",
+      "path": "console/mihomo"
+    },
+    "depends": {
+      "acl": [
+        "luci-app-console-mihomo"
+      ]
+    }
+  }
+}

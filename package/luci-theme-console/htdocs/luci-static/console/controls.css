@@ -1,0 +1,111 @@
+/* SPDX-License-Identifier: Apache-2.0 */
+.console-navigation-status { position: fixed; top: 54px; right: 20px; z-index: 10000; padding: 8px 14px; border: 1px solid #cbd6df; border-radius: 4px; background: #fff; color: #2475ae; font-size: 13px; box-shadow: 0 2px 8px #0001; pointer-events: none; }
+.console-navigation-status[hidden] { display: none; }
+body.console-ui {
+	--console-primary: #2475ae;
+	--console-primary-hover: #1b6192;
+	--console-border: #cbd6df;
+	--console-danger: #ba3341;
+	--console-radius: 4px;
+	--font-sans: "Microsoft YaHei", "PingFang SC", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+.console-ui :is(.btn, .cbi-button) {
+	box-sizing: border-box; min-height: 34px; padding: 6px 14px;
+	font: 13px/20px var(--font-sans); border: 1px solid var(--console-border);
+	border-radius: var(--console-radius); background: #fff; color: #405365;
+	box-shadow: none; text-shadow: none; text-decoration: none; vertical-align: middle;
+	transition: background-color .15s, border-color .15s, box-shadow .15s;
+}
+.console-ui :is(.btn, .cbi-button):not(:disabled):not([disabled]):hover {
+	background: #edf5fb; border-color: var(--console-primary); color: var(--console-primary);
+}
+.console-ui :is(.btn.primary, .cbi-button-action, .cbi-button-apply, .cbi-button-edit, .cbi-button-positive.important) {
+	background: var(--console-primary); border-color: var(--console-primary); color: #fff;
+}
+.console-ui :is(.btn.primary, .cbi-button-action, .cbi-button-apply, .cbi-button-edit, .cbi-button-positive.important):not(:disabled):not([disabled]):hover {
+	background: var(--console-primary-hover); border-color: var(--console-primary-hover); color: #fff;
+}
+.console-ui :is(.cbi-button-save, .cbi-button-add, .cbi-button-fieldadd, .cbi-button-positive):not(.important) {
+	background: #fff; color: var(--console-primary); border-color: var(--console-primary);
+}
+.console-ui :is(.cbi-button-remove, .cbi-button-negative, .cbi-section-remove .cbi-button) {
+	background: #fff; color: var(--console-danger); border-color: #d99aa1;
+}
+.console-ui :is(.cbi-button-remove, .cbi-button-negative, .cbi-section-remove .cbi-button):not(:disabled):not([disabled]):hover {
+	background: #fff0f1; color: #a02734; border-color: var(--console-danger);
+}
+.console-ui .cbi-button-reset { background: #fff; color: #405365; border-color: var(--console-border); }
+.console-ui :is(.btn, .cbi-button):is(:disabled, [disabled], [aria-disabled="true"]) { opacity: .45; cursor: not-allowed; box-shadow: none; }
+.console-ui :is(input:not([type="checkbox"]):not([type="radio"]):not([type="button"]):not([type="submit"]):not([type="reset"]), select, textarea, .cbi-dropdown:not(.btn):not(.cbi-button)) {
+	box-sizing: border-box; min-height: 34px; border-color: var(--console-border); border-radius: var(--console-radius);
+	background: #fff; color: #405365; font: 13px/20px var(--font-sans); box-shadow: none;
+}
+.console-ui :is(input, select, textarea, button, a, summary, .cbi-dropdown):focus-visible {
+	outline: 2px solid var(--console-primary); outline-offset: 2px; box-shadow: 0 0 0 3px #2475ae20;
+}
+.console-ui :is(input, textarea, select).cbi-input-invalid { border-color: var(--console-danger); color: var(--console-danger); }
+.console-ui :is(input[type="checkbox"], input[type="radio"]) { accent-color: var(--console-primary); }
+.console-ui :is(.tabs, .cbi-tabmenu) { background: transparent; background-image: none; border-bottom: 1px solid #dce4ea; gap: 4px; padding: 0 0 0 2px; margin-bottom: 18px; }
+.console-ui :is(.tabs, .cbi-tabmenu) > li { height: auto; min-height: 38px; margin: 0; border: 0; border-bottom: 2px solid transparent; border-radius: 0; background: transparent; box-shadow: none; }
+.console-ui :is(.tabs, .cbi-tabmenu) > li > a { display: block; padding: 8px 14px; font: 13px/20px var(--font-sans); color: #526777; }
+.console-ui :is(.tabs > li.active, .cbi-tabmenu > li.cbi-tab) { background: #fff; border-bottom-color: var(--console-primary); }
+.console-ui :is(.tabs > li.active, .cbi-tabmenu > li.cbi-tab) > a { color: var(--console-primary); font-weight: 600; }
+.console-ui :is(.tabs > li, .cbi-tabmenu > li):hover { background: #edf5fb; }
+.console-ui .modal { padding: 24px; border: 1px solid #dce4ea; border-radius: 8px; background: #fff; box-shadow: 0 16px 64px #172b3c40; }
+.console-ui .modal > h4, .console-ui .modal > h3 { font-size: 18px; line-height: 1.5; color: #334e63; padding-bottom: 16px; margin-bottom: 18px; border-bottom: 1px solid #e0e7ed; }
+.console-ui .modal .button-row { padding-top: 18px; border-top: 1px solid #e0e7ed; }
+
+/* 配置弹窗（接口 / DHCP 等 cbi-modal）：收紧标签列、统一输入宽度、
+   让状态只读区与表单行分离，减少长说明文字造成的视觉噪声。 */
+.console-ui .modal.cbi-modal { padding: 0; overflow: hidden; }
+.console-ui .modal.cbi-modal > h4 { padding: 18px 24px; margin: 0; background: #f7f9fb; border-bottom: 1px solid #e0e7ed; font-size: 16px; }
+.console-ui .modal.cbi-modal .cbi-section { padding: 20px 24px 4px; }
+.console-ui .modal.cbi-modal .cbi-tabmenu { margin: 0; padding: 0 24px; background: #fff; }
+.console-ui .modal.cbi-modal .cbi-tabmenu + .cbi-section,
+.console-ui .modal.cbi-modal .cbi-map-tabbed { padding: 0; }
+/* 只对"标签 + 控件"这种真正的表单行使用两列网格。
+   像 DHCP 这种内含 tabmenu 的容器本身也带 cbi-value，必须排除，
+   否则内层标签会被挤进 132px 的窄列里变成竖排单字。 */
+.console-ui .modal.cbi-modal .cbi-value:not(:has(.cbi-tabmenu)):not(:has(.cbi-section)) {
+	display: grid; grid-template-columns: 132px minmax(0, 1fr); align-items: start; gap: 8px 18px; padding: 9px 0; margin: 0;
+}
+/* 含标签页的容器：整行铺开，标签自身恢复横向排列。 */
+.console-ui .modal.cbi-modal .cbi-value:has(.cbi-tabmenu) { display: block; padding: 0; margin: 0; }
+.console-ui .modal.cbi-modal .cbi-value:has(.cbi-tabmenu) > .cbi-value-title { display: none; }
+.console-ui .modal.cbi-modal .cbi-value:has(.cbi-tabmenu) > .cbi-value-field { width: 100%; }
+.console-ui .modal.cbi-modal .cbi-section .cbi-tabmenu { display: flex; flex-wrap: wrap; gap: 4px; }
+.console-ui .modal.cbi-modal .cbi-section .cbi-tabmenu > li { flex: 0 0 auto; white-space: nowrap; }
+.console-ui .modal.cbi-modal .cbi-value-title { width: auto; padding-top: 7px; text-align: right; color: #526777; font-size: 13px; line-height: 20px; }
+.console-ui .modal.cbi-modal .cbi-value-field { margin: 0; min-width: 0; }
+.console-ui .modal.cbi-modal .cbi-value-field > input[type="text"],
+.console-ui .modal.cbi-modal .cbi-value-field > input[type="password"],
+.console-ui .modal.cbi-modal .cbi-value-field > select,
+.console-ui .modal.cbi-modal .cbi-value-field > .cbi-dropdown,
+.console-ui .modal.cbi-modal .cbi-value-field > .cbi-input-select { width: 100%; max-width: 460px; box-sizing: border-box; }
+.console-ui .modal.cbi-modal .cbi-value-description { margin-top: 5px; max-width: 62ch; }
+/* 状态块是只读信息卡：整行铺开，不再挤在窄标签列旁边。 */
+.console-ui .modal.cbi-modal .cbi-value:has(> .cbi-value-field > .cbi-section) { grid-template-columns: minmax(0, 1fr); }
+.console-ui .modal.cbi-modal .cbi-value:has(> .cbi-value-field > .cbi-section) > .cbi-value-title { text-align: left; padding: 0 0 6px; }
+.console-ui .modal.cbi-modal .cbi-value-field .cbi-section { padding: 12px 14px; background: #f7f9fb; border: 1px solid #e5ebef; border-radius: 4px; font-size: 12px; line-height: 1.9; }
+/* LuCI 的状态/提示图标在某些主题资源下是空图，改用色点代替，避免出现破图。 */
+.console-ui .modal.cbi-modal .cbi-value-field img,
+.console-ui .modal.cbi-modal .cbi-section img { display: none; }
+.console-ui .modal.cbi-modal .button-row { display: flex; justify-content: flex-end; gap: 10px; padding: 14px 24px; background: #f7f9fb; border-top: 1px solid #e0e7ed; }
+.console-ui .modal.cbi-modal .button-row .cbi-button { min-width: 88px; margin: 0; }
+@media (max-width: 760px) {
+	.console-ui .modal.cbi-modal .cbi-value { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+	.console-ui .modal.cbi-modal .cbi-value-title { text-align: left; padding-top: 0; }
+	.console-ui .modal.cbi-modal .cbi-section { padding: 16px 14px 4px; }
+}
+.console-ui .cbi-page-actions { padding: 16px 0; border-top: 1px solid #e0e7ed; }
+.console-ui .cbi-section-actions .cbi-button { margin: 2px; }
+.console-ui .table .tr.table-titles { background: #f4f7fa; color: #526777; }
+.console-ui .cbi-section-table-row:hover { background-color: #f6faff; }
+.console-ui .cbi-value-description { color: #64798a; font-size: 12px; line-height: 1.65; }
+.console-ui .ow-control { min-height: 34px; padding: 6px 10px; border: 1px solid var(--console-border); border-radius: var(--console-radius); background: #fff; }
+.console-ui .ow-icon-button { min-width: 34px; min-height: 34px; }
+@media (max-width: 760px) {
+	.console-ui :is(.btn, .cbi-button) { min-height: 44px; padding-top: 11px; padding-bottom: 11px; }
+	.console-ui .modal { padding: 16px; max-width: calc(100vw - 24px); box-sizing: border-box; }
+}
+@media (prefers-reduced-motion: reduce) { .console-ui :is(.btn, .cbi-button) { transition: none; } }

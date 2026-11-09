@@ -1,0 +1,228 @@
+{
+	"state": {
+		"interfaces": [
+			{
+				"name": "lan",
+				"device": "br-lan",
+				"proto": "static",
+				"role": "lan",
+				"mtuOption": "",
+				"link": {
+					"device": "br-lan",
+					"mtu": 1500,
+					"carrier": true,
+					"up": true,
+					"macaddr": "aa:bb:cc:dd:ee:01",
+					"speed": null,
+					"duplex": null,
+					"type": "bridge"
+				},
+				"runtime": {
+					"up": true,
+					"addresses": [
+						{
+							"address": "192.168.1.1",
+							"mask": 24,
+							"netmask": "255.255.255.0"
+						}
+					],
+					"gateway": null,
+					"pending": false,
+					"uptime": 53617,
+					"l3device": "br-lan",
+					"ipv6": [
+						
+					],
+					"dns": [
+						
+					],
+					"defaultRoute": false,
+					"dialing": false,
+					"protoProcess": null,
+					"dialState": "static",
+					"dialText": "静态地址，无需拨号"
+				},
+				"address": "192.168.1.1",
+				"prefix": 24,
+				"netmask": "255.255.255.0",
+				"gateway": "",
+				"dns": [
+					
+				],
+				"bridge": {
+					"name": "br-lan",
+					"ports": [
+						"eth0"
+					]
+				}
+			},
+			{
+				"name": "wan",
+				"device": "eth1",
+				"proto": "dhcp",
+				"role": "wan",
+				"mtuOption": "",
+				"link": {
+					"device": "eth1",
+					"mtu": 1500,
+					"carrier": true,
+					"up": true,
+					"macaddr": "aa:bb:cc:dd:ee:02",
+					"speed": null,
+					"duplex": null,
+					"type": "ethernet"
+				},
+				"runtime": {
+					"up": true,
+					"addresses": [
+						{
+							"address": "172.16.10.13",
+							"mask": 23,
+							"netmask": "255.255.254.0"
+						}
+					],
+					"gateway": "172.16.10.1",
+					"pending": false,
+					"uptime": 53617,
+					"l3device": "eth1",
+					"ipv6": [
+						
+					],
+					"dns": [
+						"114.114.114.114",
+						"223.5.5.5"
+					],
+					"defaultRoute": true,
+					"dialing": false,
+					"protoProcess": "udhcpc",
+					"dialState": "connected",
+					"dialText": "已获取地址"
+				},
+				"hostname": "",
+				"dns": [
+					
+				]
+			},
+			{
+				"name": "wan6",
+				"device": "eth1",
+				"proto": "dhcpv6",
+				"role": "wan",
+				"mtuOption": "",
+				"link": {
+					"device": "eth1",
+					"mtu": 1500,
+					"carrier": true,
+					"up": true,
+					"macaddr": "aa:bb:cc:dd:ee:02",
+					"speed": null,
+					"duplex": null,
+					"type": "ethernet"
+				},
+				"runtime": {
+					"up": true,
+					"addresses": [
+						
+					],
+					"gateway": null,
+					"pending": false,
+					"uptime": 53613,
+					"l3device": "eth1",
+					"ipv6": [
+						{
+							"address": "fd00:1234:5678:0:a8bb:ccff:fedd:ee02",
+							"mask": 64
+						}
+					],
+					"dns": [
+						
+					],
+					"defaultRoute": false,
+					"dialing": false,
+					"protoProcess": "odhcp6c",
+					"dialState": "connected",
+					"dialText": "已连接"
+				}
+			},
+			{
+				"name": "lan2",
+				"device": "eth2",
+				"proto": "static",
+				"role": "lan",
+				"mtuOption": "",
+				"link": {
+					"device": "eth2",
+					"mtu": 1500,
+					"carrier": true,
+					"up": true,
+					"macaddr": "aa:bb:cc:dd:ee:03",
+					"speed": null,
+					"duplex": null,
+					"type": "ethernet"
+				},
+				"runtime": {
+					"up": true,
+					"addresses": [
+						{
+							"address": "192.168.2.1",
+							"mask": 24,
+							"netmask": "255.255.255.0"
+						}
+					],
+					"gateway": null,
+					"pending": false,
+					"uptime": 249,
+					"l3device": "eth2",
+					"ipv6": [
+						
+					],
+					"dns": [
+						
+					],
+					"defaultRoute": false,
+					"dialing": false,
+					"protoProcess": null,
+					"dialState": "static",
+					"dialText": "静态地址，无需拨号"
+				},
+				"address": "192.168.2.1",
+				"prefix": 24,
+				"netmask": "255.255.255.0",
+				"gateway": "",
+				"dns": [
+					
+				]
+			}
+		],
+		"devices": [
+			{
+				"name": "br-lan",
+				"usedBy": "lan"
+			},
+			{
+				"name": "eth0",
+				"usedBy": "br-lan (桥接)"
+			},
+			{
+				"name": "eth1",
+				"usedBy": "wan6"
+			},
+			{
+				"name": "eth2",
+				"usedBy": "lan2"
+			}
+		],
+		"pending": null,
+		"defaultRoute": {
+			"interface": "wan",
+			"device": "eth1",
+			"gateway": "172.16.10.1"
+		},
+		"residentDns": {
+			"wan": [
+				"114.114.114.114",
+				"223.5.5.5"
+			]
+		}
+	}
+}

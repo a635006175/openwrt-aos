@@ -1,0 +1,46 @@
+/* SPDX-License-Identifier: Apache-2.0 */
+.cs-heading,.cs-toolbar,.cs-actions,.cs-footer { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.cs-heading { justify-content:space-between; margin-bottom:18px; }
+.cs-heading h2 { margin:0 0 6px; }
+.cs-note { color:#64798a; font-size:12px; line-height:1.7; margin:6px 0; }
+.cs-panel { margin:0 0 16px; padding:18px 22px; border:1px solid #dfe7ed; border-radius:5px; background:#fff; }
+.cs-panel h3 { margin:0 0 14px; font-size:15px; }
+.cs-metrics { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; margin-bottom:18px; }
+.cs-metric { padding:20px; background:#fff; border:1px solid #dfe7ed; border-radius:5px; }
+.cs-metric span { display:block; font-size:13px; color:#64798a; }
+.cs-metric strong { display:block; margin-top:8px; color:#2475ae; font-size:25px; font-weight:500; }
+.cs-scroll { overflow-x:auto; max-width:100%; margin-top:12px; }
+.cs-scroll table { min-width:700px; }
+.cs-scroll td { white-space:pre-line; overflow-wrap:anywhere; max-width:250px; }
+.cs-actions { min-width:150px; gap:5px; }
+.cs-toolbar { margin-bottom:12px; }
+.cs-toolbar input[type=search] { max-width:320px; }
+.cs-security textarea { width:min(100%,650px); box-sizing:border-box; }
+.cs-region-country-picker { width:min(100%,620px); }
+.cs-region-country-toolbar { display:grid; gap:8px; }
+.cs-region-country-toolbar input[type=search] { width:min(100%,420px); box-sizing:border-box; }
+.cs-region-country-actions { display:flex; align-items:center; flex-wrap:wrap; gap:8px; }
+.cs-region-country-actions .cbi-button { min-height:38px; }
+.cs-region-country-list { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr)); gap:2px 8px; max-height:260px; margin-top:8px; padding:6px; overflow:auto; border:1px solid #dfe7ed; border-radius:5px; background:#fff; }
+.cs-region-country-option { display:flex; align-items:center; gap:9px; min-width:0; min-height:44px; padding:2px 8px; border-radius:4px; cursor:pointer; overflow-wrap:anywhere; }
+.cs-region-country-option:hover { background:#f3f7fa; }
+.cs-region-country-option:has(input:checked) { background:#edf5fb; color:#175f91; }
+.cs-region-country-option input[type=checkbox] { flex:0 0 18px; width:18px; height:18px; margin:0; accent-color:#2475ae; }
+.cs-region-country-option input:disabled + span { color:#8796a1; }
+.cs-region-country-option[hidden] { display:none; }
+.cs-region-country-empty { margin:8px 0 0; }
+.cs-protocol { display:inline-flex; min-width:150px; gap:15px; padding:15px; margin:0 10px 10px 0; border:1px solid #dfe7ed; border-radius:4px; }
+.cs-chart svg { display:block; width:100%; max-height:240px; }
+.cs-log { max-height:420px; overflow:auto; white-space:pre-wrap; overflow-wrap:anywhere; font:12px/1.7 ui-monospace,Consolas,monospace; background:#f6f9fb; padding:12px; border-radius:4px; }
+.cs-footer { justify-content:space-between; font-size:12px; color:#64798a; }
+.cs-blocked-link { color:#2475ae; cursor:pointer; text-decoration:underline; text-underline-offset:3px; }
+.cs-blocked-link:hover { color:#175f91; }
+.cs-metric-link { cursor:pointer; transition:border-color .15s, box-shadow .15s; }
+.cs-metric-link:hover, .cs-metric-link:focus-visible { border-color:#2475ae; box-shadow:0 0 0 2px rgba(36,117,174,.15); outline:none; }
+.cs-security .alert-message .cbi-button { margin-right:8px; }
+body.console-ui #modal_overlay > .modal.cs-region-rule-modal { display:flex; flex-direction:column; height:min(90vh,920px); max-height:min(90vh,920px); min-height:0; overflow:hidden; }
+body.console-ui #modal_overlay > .modal.cs-region-rule-modal > .cs-region-rule-form { flex:1 1 auto; min-height:0; overflow-y:auto; overscroll-behavior:contain; scrollbar-gutter:stable; }
+body.console-ui #modal_overlay > .modal.cs-region-rule-modal > .button-row { flex:0 0 auto; }
+@media(max-width:850px) { .cs-security .cbi-button,.cs-region-country-actions .cbi-button {min-height:44px;} .cs-metrics {grid-template-columns:repeat(2,minmax(0,1fr));} .cs-panel {padding:14px;} .cs-metric {padding:14px;} .cs-metric strong {font-size:21px;} }
+@media(max-width:760px) { body.console-ui #modal_overlay > .modal.cs-region-rule-modal { height:calc(100vh - 24px); max-height:calc(100vh - 24px); } }
+@media(max-width:430px) { .cs-heading {align-items:flex-start;} .cs-metric strong {font-size:18px;} }

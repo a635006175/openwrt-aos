@@ -1,0 +1,117 @@
+{
+  "admin/flow": {
+    "title": "流控分流",
+    "order": 33,
+    "action": {
+      "type": "firstchild"
+    },
+    "depends": {
+      "acl": [
+        "luci-app-console-flow"
+      ]
+    }
+  },
+  "admin/flow/steer": {
+    "title": "分流设置",
+    "order": 10,
+    "action": {
+      "type": "firstchild"
+    },
+    "depends": {
+      "acl": [
+        "luci-app-console-flow"
+      ]
+    }
+  },
+  "admin/flow/steer/load": {
+    "title": "多线负载",
+    "order": 10,
+    "action": {
+      "type": "view",
+      "path": "console/flow-load"
+    },
+    "depends": {
+      "acl": [
+        "luci-app-console-flow"
+      ]
+    }
+  },
+  "admin/flow/steer/proto": {
+    "title": "协议分流",
+    "order": 20,
+    "action": {
+      "type": "view",
+      "path": "console/flow-proto"
+    },
+    "depends": {
+      "acl": [
+        "luci-app-console-flow"
+      ]
+    }
+  },
+  "admin/flow/steer/port": {
+    "title": "端口分流",
+    "order": 30,
+    "action": {
+      "type": "view",
+      "path": "console/flow-port"
+    },
+    "depends": {
+      "acl": [
+        "luci-app-console-flow"
+      ]
+    }
+  },
+  "admin/flow/steer/domain": {
+    "title": "域名分流",
+    "order": 40,
+    "action": {
+      "type": "view",
+      "path": "console/flow-domain"
+    },
+    "depends": {
+      "acl": [
+        "luci-app-console-flow"
+      ]
+    }
+  },
+  "admin/flow/steer/updown": {
+    "title": "上下行分离",
+    "order": 50,
+    "action": {
+      "type": "view",
+      "path": "console/flow-updown"
+    },
+    "depends": {
+      "acl": [
+        "luci-app-console-flow"
+      ]
+    }
+  },
+  "admin/flow/smart": {
+    "title": "智能流控",
+    "order": 20,
+    "action": {
+      "type": "view",
+      "path": "console/flow-smart"
+    },
+    "depends": {
+      "acl": [
+        "luci-app-console-flow"
+      ]
+    }
+  },
+  "admin/flow/limit": {
+    "title": "终端限速",
+    "order": 30,
+    "action": {
+      "type": "view",
+      "path": "console/flow-limit"
+    },
+    "depends": {
+      "acl": [
+        "luci-app-console-flow"
+      ]
+    }
+  }
+}

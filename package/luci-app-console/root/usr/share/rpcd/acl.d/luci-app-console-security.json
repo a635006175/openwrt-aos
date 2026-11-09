@@ -1,0 +1,7 @@
+{
+ "luci-app-console-security": {
+  "description": "Firewall geography policies and device traffic analytics",
+  "read": { "ubus": { "console-security": ["state", "history", "logs", "blocked", "lookup", "preview"] } },
+  "write": { "ubus": { "console-security": ["apply", "confirm", "rollback", "geo_update"] } }
+ }
+}

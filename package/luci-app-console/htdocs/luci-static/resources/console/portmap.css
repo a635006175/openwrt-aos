@@ -1,0 +1,27 @@
+/* SPDX-License-Identifier: Apache-2.0 */
+.pm-bar,.pm-actions,.pm-search {display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.pm-bar {justify-content:space-between;margin:16px 0;}
+.pm-search input {width:260px;max-width:100%;}
+.pm-table-scroll {overflow-x:auto;max-width:100%;}
+.pm-table {min-width:1000px;}
+.pm-table thead th {background:#4c5265;color:white;white-space:nowrap;}
+.pm-table thead button {color:inherit!important;background:transparent!important;border:0!important;padding:0!important;box-shadow:none!important;}
+.pm-table td {overflow-wrap:anywhere;max-width:230px;}
+.pm-row-actions {display:flex;gap:8px;white-space:nowrap;}
+.pm-row-actions button {border:0;background:transparent;box-shadow:none;color:#1685ba;padding:3px;}
+.pm-enabled {color:#179c72;white-space:nowrap;}.pm-disabled {color:#788392;white-space:nowrap;}
+.pm-note,.pm-status {font-size:12px;color:#64798a;line-height:1.7;}
+.pm-editor {max-width:100%;}.pm-editor .button-row {display:flex;gap:12px;justify-content:flex-end;margin-top:22px;}
+.console-ui .modal:has(.pm-editor) {width:960px;max-width:calc(100vw - 32px);max-height:calc(100vh - 40px);overflow:auto;box-sizing:border-box;}
+.pm-editor .cbi-value {display:grid;grid-template-columns:140px minmax(0,1fr);gap:20px;align-items:start;}
+.pm-editor .cbi-value-title {float:none;width:auto;text-align:right;}
+.pm-editor .cbi-value-field {margin-left:0;min-width:0;width:auto;}
+.pm-radio {display:flex;gap:24px;align-items:center;min-height:32px;}
+.pm-editor input[type=text],.pm-editor textarea,.pm-editor select:not([multiple]) {width:100%;max-width:460px;box-sizing:border-box;}
+.pm-editor [hidden] {display:none!important;}
+.pm-allow {display:grid;grid-template-columns:minmax(150px,1fr) 96px minmax(150px,1fr);gap:12px;max-width:680px;}
+.pm-allow-source {display:flex;flex-direction:column;gap:8px;min-width:0;}
+.pm-allow select {width:100%;min-height:150px;box-sizing:border-box;}
+.pm-allow-buttons {display:flex;flex-direction:column;justify-content:center;gap:10px;}
+.pm-editor textarea {min-height:100px;}
+@media(max-width:700px){.pm-root .cbi-button,.pm-editor .cbi-button {min-height:44px;}.pm-allow {grid-template-columns:minmax(0,1fr);}.pm-allow-buttons {flex-direction:row;}.pm-search {width:100%;}.pm-search input {flex:1;min-width:0;}.pm-editor .cbi-value {grid-template-columns:minmax(0,1fr);gap:5px;}.pm-editor .cbi-value-title {float:none;text-align:left;width:auto;}.pm-editor .cbi-value-field {margin-left:0;}}

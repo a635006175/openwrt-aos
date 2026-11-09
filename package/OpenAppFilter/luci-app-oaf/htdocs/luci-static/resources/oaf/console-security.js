@@ -1,0 +1,2 @@
+
+(function($){if(!$||!window.L||!L.env||!L.env.token)return;$.ajaxPrefilter(function(options){if(String(options.type).toUpperCase()!=='POST'||!/\/admin\/services\/oaf\//.test(options.url))return;var token='token='+encodeURIComponent(L.env.token);if(typeof options.data==='string')options.data+=(options.data?'&':'')+token;else if(options.data instanceof FormData)options.data.append('token',L.env.token);else options.data=token;});})(window.jQuery);

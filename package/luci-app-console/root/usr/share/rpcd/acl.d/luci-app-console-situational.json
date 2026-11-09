@@ -1,0 +1,7 @@
+{
+ "luci-app-console-situational": {
+  "description": "Situational awareness dashboard and automatic threat blocking",
+  "read": { "ubus": { "console-situational": ["overview", "config"] } },
+  "write": { "ubus": { "console-situational": ["set", "unban", "ban", "refresh"] } }
+ }
+}

@@ -1,0 +1,16 @@
+#!/bin/sh
+# Regenerate interface IP matches after DHCP/PPPoE address changes.
+case "$ACTION" in ifup|ifupdate|ifdown) ;; *) exit 0;; esac
+[ -n "$(uci -q get firewall.console_portmap.model)" ] || exit 0
+for attempt in 1 2 3 4 5; do
+INTERFACE="$INTERFACE" /usr/bin/ucode -e '
+ import { state, apply } from "console.portmap";
+ const s=state();
+ if (length(s.rules) && length(filter(s.wans,w=>w.name==getenv("INTERFACE")))) {
+  try { apply({revision:s.revision,rules:s.rules,groups:s.groups}); }
+  catch(e) { die("portmap interface refresh: "+e.message+"\n"); }
+ }
+' >/tmp/console-portmap-hotplug.log 2>&1 && exit 0
+sleep 1
+done
+logger -t console-portmap < /tmp/console-portmap-hotplug.log

@@ -1,0 +1,171 @@
+{
+  "admin/behavior": {
+    "title": "行为管理",
+    "order": 45,
+    "action": {
+      "type": "firstchild"
+    },
+    "depends": {
+      "acl": [
+        "oaf"
+      ],
+      "fs": {
+        "/usr/bin/oafd": "executable",
+        "/etc/config/fwx": "file"
+      }
+    }
+  },
+  "admin/behavior/dashboard": {
+    "title": "管理概览",
+    "order": 10,
+    "action": {
+      "type": "alias",
+      "path": "admin/services/oaf/dashboard"
+    },
+    "depends": {
+      "acl": [
+        "oaf"
+      ],
+      "fs": {
+        "/usr/bin/oafd": "executable",
+        "/etc/config/fwx": "file"
+      }
+    }
+  },
+  "admin/behavior/devices": {
+    "title": "设备管理",
+    "order": 20,
+    "action": {
+      "type": "alias",
+      "path": "admin/services/oaf/users/list"
+    },
+    "depends": {
+      "acl": [
+        "oaf"
+      ],
+      "fs": {
+        "/usr/bin/oafd": "executable",
+        "/etc/config/fwx": "file"
+      }
+    }
+  },
+  "admin/behavior/rules": {
+    "title": "应用过滤",
+    "order": 30,
+    "action": {
+      "type": "alias",
+      "path": "admin/services/oaf/app_filter/rules"
+    },
+    "depends": {
+      "acl": [
+        "oaf"
+      ],
+      "fs": {
+        "/usr/bin/oafd": "executable",
+        "/etc/config/fwx": "file"
+      }
+    }
+  },
+  "admin/behavior/access": {
+    "title": "上网控制",
+    "order": 40,
+    "action": {
+      "type": "alias",
+      "path": "admin/services/oaf/mac_filter/rules"
+    },
+    "depends": {
+      "acl": [
+        "oaf"
+      ],
+      "fs": {
+        "/usr/bin/oafd": "executable",
+        "/etc/config/fwx": "file"
+      }
+    }
+  },
+  "admin/behavior/whitelist": {
+    "title": "白名单",
+    "order": 50,
+    "action": {
+      "type": "alias",
+      "path": "admin/services/oaf/whitelist"
+    },
+    "depends": {
+      "acl": [
+        "oaf"
+      ],
+      "fs": {
+        "/usr/bin/oafd": "executable",
+        "/etc/config/fwx": "file"
+      }
+    }
+  },
+  "admin/behavior/records": {
+    "title": "应用记录",
+    "order": 60,
+    "action": {
+      "type": "alias",
+      "path": "admin/services/oaf/app_record"
+    },
+    "depends": {
+      "acl": [
+        "oaf"
+      ],
+      "fs": {
+        "/usr/bin/oafd": "executable",
+        "/etc/config/fwx": "file"
+      }
+    }
+  },
+  "admin/behavior/features": {
+    "title": "特征库",
+    "order": 70,
+    "action": {
+      "type": "alias",
+      "path": "admin/services/oaf/feature"
+    },
+    "depends": {
+      "acl": [
+        "oaf"
+      ],
+      "fs": {
+        "/usr/bin/oafd": "executable",
+        "/etc/config/fwx": "file"
+      }
+    }
+  },
+  "admin/behavior/settings": {
+    "title": "设置",
+    "order": 80,
+    "action": {
+      "type": "alias",
+      "path": "admin/services/oaf/advanced"
+    },
+    "depends": {
+      "acl": [
+        "oaf"
+      ],
+      "fs": {
+        "/usr/bin/oafd": "executable",
+        "/etc/config/fwx": "file"
+      }
+    }
+  },
+  "admin/behavior/about": {
+    "title": "关于",
+    "order": 90,
+    "action": {
+      "type": "alias",
+      "path": "admin/services/oaf/about"
+    },
+    "depends": {
+      "acl": [
+        "oaf"
+      ],
+      "fs": {
+        "/usr/bin/oafd": "executable",
+        "/etc/config/fwx": "file"
+      }
+    }
+  }
+}

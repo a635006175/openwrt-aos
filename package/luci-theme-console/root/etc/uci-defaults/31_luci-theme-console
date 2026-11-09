@@ -1,0 +1,9 @@
+#!/bin/sh
+uci -q set luci.themes.Console='/luci-static/console'
+ln -snf resources /www/luci-static/console-r8
+uci set luci.main.resourcebase='/luci-static/console-r8'
+if [ "$(uci -q get luci.main.mediaurlbase)" = '/luci-static/bootstrap' ]; then
+	uci set luci.main.mediaurlbase='/luci-static/console'
+fi
+uci commit luci
+exit 0
