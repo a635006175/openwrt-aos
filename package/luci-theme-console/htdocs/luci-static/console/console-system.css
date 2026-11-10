@@ -1,24 +1,10 @@
 /* SPDX-License-Identifier: Apache-2.0 */
 /* Shared soft-surface dashboard system, adapted from the supplied admin reference. */
 @font-face {
-	font-family: "Console DIN";
-	src: url("fonts/DINPro-Regular.otf") format("opentype");
+	font-family: "Source Han Sans SC";
+	src: url("fonts/SourceHanSansSC-VF.otf.woff2") format("woff2");
 	font-style: normal;
-	font-weight: 400;
-	font-display: swap;
-}
-@font-face {
-	font-family: "Console DIN";
-	src: url("fonts/DINPro-Medium.otf") format("opentype");
-	font-style: normal;
-	font-weight: 500;
-	font-display: swap;
-}
-@font-face {
-	font-family: "Console DIN";
-	src: url("fonts/DINPro-Bold.otf") format("opentype");
-	font-style: normal;
-	font-weight: 700;
+	font-weight: 250 900;
 	font-display: swap;
 }
 :root {
@@ -43,8 +29,8 @@
 	--console-radius-control: 10px;
 	--console-radius-modal: 18px;
 	--console-shadow-card: 0 1px 2px rgba(16, 24, 40, .04), 0 6px 16px rgba(16, 24, 40, .05);
-	--console-font-sans: "Microsoft YaHei UI", "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", system-ui, sans-serif;
-	--console-font-numeric: "Console DIN", "Bahnschrift", "Arial", sans-serif;
+	--console-font-sans: "Source Han Sans SC", "Microsoft YaHei UI", "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", system-ui, sans-serif;
+	--console-font-numeric: var(--console-font-sans);
 	--console-font: var(--console-font-sans);
 	--console-size-caption: 13px;
 	--console-size-label: 13px;

@@ -5,7 +5,7 @@
 
 - 上游基线：`openwrt/openwrt` @ `29cf0022eb3f030d538ba452487c44611b106ed2`
 - 目标平台：`x86/64`（`x86_64/DEVICE_generic`），内核 6.18.55
-- 当前系统版本标识：`AOS-20261109-V1`
+- 当前系统版本标识：`AOS-20261110-V2`
 - 许可：OpenWrt 自身及各 package 沿用其原有许可（见各子目录 LICENSE）；本项目新增代码为 Apache-2.0
 
 ---
@@ -183,7 +183,7 @@ node tests/console-live.cjs
 
 - OpenWrt 本体及其官方 package：见各目录内 LICENSE，主要为 GPL-2.0
 - `package/OpenAppFilter/`：GPL-2.0（第三方，见上）
-- 本项目新增的主题、应用、安装器与构建脚本：Apache-2.0
-- `luci-theme-console` 内的 DINPro 字体、安装器内的 Unifont 子集：各自的字体许可，
+- 本项目新增的主题、应用、安装器与构建脚本：Apache-2.0；`console-mihomo` 封装为 GPL-3.0-only，各组件以其声明为准
+- `luci-theme-console` 内的思源黑体（SIL OFL 1.1）、安装器字体：各自的字体许可，
   见 `package/luci-theme-console/htdocs/luci-static/console/fonts/` 与
   `.dsh/skills/openwrt-installer-image/assets/*-LICENSE.txt`

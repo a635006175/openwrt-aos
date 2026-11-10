@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Remove personal VPN/proxy/DDNS settings from a disposable release rootfs."""
+"""Remove device identity, credentials and runtime data from a release copy."""
 from pathlib import Path, PurePosixPath
 import argparse,hashlib,json,os,re,shutil,tarfile
 
@@ -16,7 +16,9 @@ def database_hashes(root):
     result={}
     for p in root.rglob('*'):
         if p.is_symlink() or not p.is_file() or any('mihomo' in part for part in p.parts):continue
-        if p.suffix in ('.db','.sqlite','.sqlite3'):
+        # Only public GeoIP datasets are immutable release resources. Runtime
+        # databases must be removed rather than protected by this hash check.
+        if p.parent==root/'srv/console-security' and re.fullmatch(r'geo-[0-9-]+\.db',p.name):
             result[str(p.relative_to(root))]=hashlib.sha256(p.read_bytes()).hexdigest()
     return result
 
@@ -29,8 +31,58 @@ def apply(root):
         if p.is_dir() and not p.is_symlink():shutil.rmtree(p)
         else:p.unlink()
         removed+=1
-    for rel in ['etc/console-vpn','etc/openvpn','usr/share/ddns/custom']:
+    for rel in ['etc/console-vpn','etc/openvpn','usr/share/ddns/custom',
+                'etc/console-backup','etc/console-security','etc/console-situational',
+                'etc/console-flow','etc/console-portmap','srv/console-history',
+                'etc/uhttpd.key','etc/uhttpd.crt','etc/ethers','etc/installer-nic.json']:
         drop(root/rel)
+    for directory in [root/'root',root/'tmp',root/'var/log']:
+        if directory.is_dir() and not directory.is_symlink():
+            for p in list(directory.iterdir()):drop(p)
+    for directory,allow in [
+        ('srv/console-security',lambda n: bool(re.fullmatch(r'geo-[0-9-]+\.db',n)) or n=='geo.json'),
+        ('srv/console-situational',lambda n: bool(re.fullmatch(r'feed-[a-zA-Z0-9_-]+\.txt',n)) or n=='feeds.json'),
+    ]:
+        d=root/directory
+        if d.is_dir():
+            for p in list(d.iterdir()):
+                if not allow(p.name):drop(p)
+    for pattern in ['etc/dropbear/*_host_key','etc/dropbear/authorized_keys','etc/ssh/ssh_host_*']:
+        for p in list(root.glob(pattern)):drop(p)
+    # Restore distribution defaults, removing saved leases, port forwards,
+    # DDNS/API credentials and device-specific address assignments.
+    repo=Path(__file__).resolve().parents[4]
+    theme=repo/'package/luci-theme-console/htdocs/luci-static/console'
+    destination=root/'www/luci-static/console'
+    (destination/'fonts').mkdir(parents=True,exist_ok=True)
+    for p in list((destination/'fonts').glob('DINPro-*.otf')):drop(p)
+    for name in ['SourceHanSansSC-VF.otf.woff2','LICENSE.txt']:
+        shutil.copyfile(theme/'fonts'/name,destination/'fonts'/name)
+    shutil.copyfile(theme/'console-system.css',destination/'console-system.css')
+    defaults={
+        'dhcp':'package/network/services/dnsmasq/files/dhcp.conf',
+        'firewall':'package/network/config/firewall/files/firewall.config',
+        'rpcd':'package/system/rpcd/files/rpcd.config',
+    }
+    for name,rel in defaults.items():
+        source=repo/rel
+        if not source.is_file():raise RuntimeError('Missing release default: '+rel)
+        (root/'etc/config'/name).write_bytes(source.read_bytes())
+    oaf=repo/'package/OpenAppFilter/open-app-filter/files'
+    for name in ['appfilter','appfilter_whitelist','fwx','fwx_record','mac_blacklist',
+                 'macfilter','macfilter_whitelist','user_info']:
+        source=oaf/(name+'.config')
+        if source.is_file():(root/'etc/config'/name).write_bytes(source.read_bytes())
+    for p in list((root/'etc/config').iterdir()):
+        if re.search(r'(?i)(?:\.bak|\.orig|\.old|backup|last-good)',p.name):drop(p)
+    (root/'etc/config/network').write_text("config interface 'loopback'\n\toption device 'lo'\n\toption proto 'static'\n\toption ipaddr '127.0.0.1'\n\toption netmask '255.0.0.0'\n")
+    (root/'etc/hosts').write_text('127.0.0.1 localhost\n::1 localhost ip6-localhost ip6-loopback\n')
+    (root/'etc/rc.local').write_text('#!/bin/sh\nexit 0\n');(root/'etc/rc.local').chmod(0o755)
+    shadow=root/'etc/shadow'
+    if shadow.is_file():
+        lines=shadow.read_text().splitlines()
+        shadow.write_text('\n'.join('root:::0:99999:7:::' if line.startswith('root:') else line for line in lines)+'\n')
+        shadow.chmod(0o600)
     mihomo=root/'etc/console-mihomo'
     if mihomo.is_dir():
         # GeoIP/geosite databases are program resources, not saved subscriptions.
@@ -72,14 +124,28 @@ def apply(root):
     if before!=after:raise RuntimeError('A retained database was changed by release sanitization')
     policy={'openvpn_accounts':0,'openvpn_configured':False,'openvpn_autostart':False,
             'mihomo_configured':False,'mihomo_autostart':False,'ddns_saved_services':0,
-            'retained_databases':len(after),'removed_config_groups':removed,'removed_archive_members':archive_members_removed}
+            'retained_databases':len(after),'removed_config_groups':removed,'removed_archive_members':archive_members_removed,
+            'ssh_host_keys_embedded':False,'runtime_history_embedded':False,
+            'development_backups_embedded':False,'network_defaults_reset':True}
     (root/'etc/console-image-policy.json').write_text(json.dumps(policy,indent=2)+'\n')
     return policy
 
 def check(root):
     bad=[]
-    for rel in ['etc/console-vpn','etc/openvpn']:
+    for rel in ['etc/console-vpn','etc/openvpn','etc/console-backup','srv/console-history',
+                'etc/uhttpd.key','etc/uhttpd.crt','etc/console-security','etc/console-situational']:
         if (root/rel).exists():bad.append(rel)
+    for pattern in ['etc/dropbear/*_host_key','etc/dropbear/authorized_keys','etc/ssh/ssh_host_*',
+                    '**/DINPro-*.otf']:
+        bad.extend(str(p.relative_to(root)) for p in root.glob(pattern))
+    if (root/'root').is_dir():
+        bad.extend(str(p.relative_to(root)) for p in (root/'root').iterdir())
+    for directory,allow in [
+        ('srv/console-security',lambda n: bool(re.fullmatch(r'geo-[0-9-]+\.db',n)) or n=='geo.json'),
+        ('srv/console-situational',lambda n: bool(re.fullmatch(r'feed-[a-zA-Z0-9_-]+\.txt',n)) or n=='feeds.json'),
+    ]:
+        d=root/directory
+        if d.is_dir():bad.extend(str(p.relative_to(root)) for p in d.iterdir() if not allow(p.name))
     mihomo=root/'etc/console-mihomo'
     if mihomo.exists():
         bad.extend('etc/console-mihomo/'+p.name for p in mihomo.iterdir() if p.name not in ['geoip.metadb','GeoIP.dat','GeoSite.dat','Country.mmdb'])

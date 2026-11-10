@@ -35,3 +35,7 @@ git-src
 .cproject
 .ccache
 .vscode*
+/.stage/
+/交付-VPN双内网/
+__pycache__/
+*.pyc
