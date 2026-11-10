@@ -52,6 +52,18 @@ def apply(root):
     # Restore distribution defaults, removing saved leases, port forwards,
     # DDNS/API credentials and device-specific address assignments.
     repo=Path(__file__).resolve().parents[4]
+    # Device snapshots can predate the public source's example-data cleanup.
+    # Use the reviewed source for these installed files rather than resurrecting
+    # the original device addresses embedded in samples and explanatory comments.
+    app=repo/'package/luci-app-console'
+    for rel in ['usr/sbin/selftest-situational.sh','usr/share/ucode/console/security.uc',
+                'usr/share/ucode/console/situational.uc','usr/share/ucode/console/net-state.uc']:
+        source=app/'root'/rel;target=root/rel
+        if target.is_file():shutil.copyfile(source,target)
+    for rel in ['console/model.js','view/console/security.js']:
+        source=app/'htdocs/luci-static/resources'/rel
+        target=root/'www/luci-static/resources'/rel
+        if target.is_file():shutil.copyfile(source,target)
     theme=repo/'package/luci-theme-console/htdocs/luci-static/console'
     destination=root/'www/luci-static/console'
     (destination/'fonts').mkdir(parents=True,exist_ok=True)

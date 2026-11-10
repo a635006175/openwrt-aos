@@ -36,6 +36,8 @@ class ReleaseCopyTests(unittest.TestCase):
                 'etc/console-mihomo/geoip.metadb':b'public-geodata',
                 'www/luci-static/console/fonts/DINPro-Regular.otf':b'old-font',
                 'usr/sbin/application':b'program-must-not-change',
+                'usr/sbin/selftest-situational.sh':b'old-device-log-sample',
+                'www/luci-static/resources/console/model.js':b'old-device-address-example',
             }
             for name,data in fixture.items():
                 p=root/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(data)
@@ -53,6 +55,8 @@ class ReleaseCopyTests(unittest.TestCase):
             self.assertEqual(list((root/'root').iterdir()),[])
             self.assertEqual((root/'www/luci-static/console/fonts/SourceHanSansSC-VF.otf.woff2').read_bytes(),(REPO/'package/luci-theme-console/htdocs/luci-static/console/fonts/SourceHanSansSC-VF.otf.woff2').read_bytes())
             self.assertFalse(policy['ssh_host_keys_embedded'])
+            self.assertEqual((root/'usr/sbin/selftest-situational.sh').read_bytes(),(REPO/'package/luci-app-console/root/usr/sbin/selftest-situational.sh').read_bytes())
+            self.assertEqual((root/'www/luci-static/resources/console/model.js').read_bytes(),(REPO/'package/luci-app-console/htdocs/luci-static/resources/console/model.js').read_bytes())
             # A second sanitization must also pass without restoring device data.
             san.apply(root);self.assertTrue(san.check(root))
 
