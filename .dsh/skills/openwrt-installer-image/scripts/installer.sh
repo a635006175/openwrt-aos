@@ -454,6 +454,22 @@ nic_apply_network() {
     }
     END { flushblk() }
     ' "$_f" > "$_t" || { rm -f "$_t"; return 1; }
+    # A clean release may contain only loopback. Populate missing sections from
+    # the user's validated port choices instead of requiring a device snapshot.
+    if [ -n "$lan_port" ] && [ -z "$(nic_showvals "$_t" device '' br-lan name)" ]; then
+        printf '\nconfig device\n\toption name '\''br-lan'\''\n\toption type '\''bridge'\''\n\tlist ports '\''%s'\''\n' "$lan_port" >> "$_t"
+    fi
+    if [ -n "$lan_port" ] && ! nic_has_iface "$_t" lan; then
+        printf '\nconfig interface '\''lan'\''\n\toption device '\''br-lan'\''\n\toption proto '\''static'\''\n\tlist ipaddr '\''%s'\''\n\toption ip6assign '\''60'\''\n' "$lan_cidr" >> "$_t"
+    fi
+    if [ -n "$wan_port" ]; then
+        if ! nic_has_iface "$_t" wan; then
+            printf '\nconfig interface '\''wan'\''\n\toption device '\''%s'\''\n\toption proto '\''dhcp'\''\n' "$wan_port" >> "$_t"
+        fi
+        if ! nic_has_iface "$_t" wan6; then
+            printf '\nconfig interface '\''wan6'\''\n\toption device '\''%s'\''\n\toption proto '\''dhcpv6'\''\n' "$wan_port" >> "$_t"
+        fi
+    fi
     nic_splice "$_f" "$_t" || return 1
     return 0
 }
