@@ -22,10 +22,10 @@ OpenWrt 源码固定为 `29cf0022eb3f030d538ba452487c44611b106ed2`，LuCI、pack
 
 最终发布路径固定为`/home/openwrt/console-sync/openwrt-console-installer.iso`，附同名SHA256和manifest。新版本验证后替换这一文件，不再保留历史安装器副本或并列版本目录。
 
-当前保留原v7-nic网口选择版的内容；本次清理没有重新编译镜像。安装步骤见[README-INSTALL.md](README-INSTALL.md)。
+当前公开发行版本为 AOS-20261110-V2，已重新生成 BIOS/UEFI 载荷和 ISO，替换为思源黑体，并清除设备密钥、运行历史与开发备份。安装步骤见[README-INSTALL.md](README-INSTALL.md)。
 
 ## 开发与编译同步约定
 
 开发实机192.168.1.1当前部署代码是基准。修改完成后同时核对本地package源码、编译机console-sync/package、openwrt-console-build/package和router-build/rootfs中的对应部署代码；包括主题模板、OAF资源及基础启动脚本，不能只同步本轮改动的几个文件后声称全量一致。通过SHA256清单确认差异为0，差异覆盖前保留备份。
 
-源码同步不自动编译镜像。同步后由router-build/development-sync-state.json标记载荷及ISO待更新；build-iso.sh拒绝使用待更新的旧载荷，正式发布前必须完整生成载荷。安装器现有的网口选择、用户配置和数据库保留规则继续沿用。
+源码同步不自动编译镜像。同步后由router-build/development-sync-state.json标记载荷及ISO待更新；build-iso.sh拒绝使用待更新的旧载荷，正式发布前必须完整生成载荷。公开发行不得继承设备主机私钥、用户配置、运行历史或开发备份；只保留符合许可要求的公共 GeoIP、威胁情报等资源。

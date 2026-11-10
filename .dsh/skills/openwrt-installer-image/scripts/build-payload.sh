@@ -510,12 +510,9 @@ fi
 for d in dev proc sys; do
     [ -d "$ROOTFS/$d" ] || die "rootfs 缺 /$d —— 必须补出来，否则 preinit 卡死"
 done
-# 数据库是这次镜像的核心内容，缺了要立刻发现而不是等装完才察觉
-for f in srv/console-security/traffic.db; do
-    [ -f "$ROOTFS/$f" ] || die "rootfs 缺 $f —— 数据库没带进来"
-done
-[ -d "$ROOTFS/srv/console-situational" ] \
-    || die "rootfs 缺 srv/console-situational —— 态势感知数据库没带进来"
+# A fresh source build has no device history database. Public resources are
+# optional; runtime history is initialized on first boot and must not be required
+# as an input to a public release.
 for t in mkfs.vfat mcopy sgdisk sfdisk mke2fs; do
     command -v $t >/dev/null || die "缺工具 $t"
 done

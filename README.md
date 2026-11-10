@@ -111,7 +111,7 @@ OPENWRT_BUILD_DIR=/data/build OPENWRT_BUILD_JOBS=8 ./tools/console-build/build.s
 改系统名称（引导菜单 + 系统内部版本标识）：
 
 ```sh
-build-payload.sh --os-name AOS-20261109-V1 ...
+build-payload.sh --os-name AOS-20261110-V2 ...
 ```
 
 不传 `--os-name` 则保持 OpenWrt 原始标识，不会静默改写 `etc/os-release`。
